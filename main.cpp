@@ -19,7 +19,7 @@ struct HeapA
 {
     A* a;
 
-    HeapA(A* instancePtr) : a {instancePtr} { }
+    HeapA(): a {new A} { }
     
     ~HeapA() {
         delete a;
@@ -117,6 +117,14 @@ good to go!
 #include <iostream>
 struct FloatType
 {
+    float* value;
+
+    FloatType(float f) : value {new float(f)} { }
+
+    ~FloatType() {
+        delete value;
+    }
+
     float add (float lhs, float rhs);
     float subtract (float lhs, float rhs);
     float multiply (float lhs, float rhs);
@@ -150,6 +158,14 @@ float FloatType::divide (float lhs, float rhs)
 
 struct DoubleType
 {
+    double* value;
+
+    DoubleType(double d) : value {new double(d)} { }
+
+    ~DoubleType() {
+        delete value;
+    }
+
     double add (double lhs, double rhs);
     double subtract (double lhs, double rhs);
     double multiply (double lhs, double rhs);
@@ -183,6 +199,14 @@ double DoubleType::divide (double lhs, double rhs)
 
 struct IntType
 {
+    int* value;
+
+    IntType(int i) : value {new int(i)} { }
+
+    ~IntType() {
+        delete value;
+    }
+
     int add (int lhs, int rhs);
     int subtract (int lhs, int rhs);
     int multiply (int lhs, int rhs);
