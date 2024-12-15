@@ -110,10 +110,12 @@ struct A {};
 struct HeapA
 { 
     HeapA() : a(new A) {}
+
     ~HeapA()
     {
         delete a;
     }
+
     A* a = nullptr;
 };
 
@@ -131,11 +133,12 @@ struct IntType;
 
 struct FloatType
 {
-    float* value;
+    float* value = nullptr;
 
     FloatType(float f) : value {new float(f)} { }
 
-    ~FloatType() {
+    ~FloatType() 
+    {
         delete value;
     }
 
@@ -158,11 +161,12 @@ struct FloatType
 
 struct DoubleType
 {
-    double* value;
+    double* value = nullptr;
 
     DoubleType(double d) : value {new double(d)} { }
 
-    ~DoubleType() {
+    ~DoubleType() 
+    {
         delete value;
     }
 
@@ -189,7 +193,8 @@ struct IntType
 
     IntType(int i) : value {new int(i)} { }
 
-    ~IntType() {
+    ~IntType() 
+    {
         delete value;
     }
 
