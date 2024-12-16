@@ -1,7 +1,5 @@
 struct IntType
 {
-    int* value;
-
     IntType (int i) : value {new int (i)} { }
 
     ~IntType() 
@@ -9,8 +7,14 @@ struct IntType
         delete value;
     }
 
+    operator int() const { return *value; }
+
     IntType& add (int rhs);
     IntType& divide (int rhs);
     IntType& multiply (int rhs);
     IntType& subtract (int rhs);
+
+private:
+    int* value;
+
 };

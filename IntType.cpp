@@ -1,3 +1,4 @@
+#include <iostream>
 #include "IntType.h"
 
 IntType& IntType::add (int rhs)

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "DoubleType.h"
 
 DoubleType& DoubleType::add (double rhs)

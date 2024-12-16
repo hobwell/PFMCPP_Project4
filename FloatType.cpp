@@ -1,3 +1,4 @@
+#include <iostream>
 #include "FloatType.h"
 
 FloatType& FloatType::add (float rhs)
