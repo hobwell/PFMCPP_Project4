@@ -1,3 +1,5 @@
+#include <sstream>
+#include <iomanip>
 #include <iostream>
 #include <cmath>
 #include "IntType.h"
@@ -71,5 +73,8 @@ FloatType& FloatType::subtract (const float rhs)
 
 std::string FloatType::toString() const
 {
-    return std::to_string (*value);
+    // thanks stack overflow: https://stackoverflow.com/a/46424921
+    std::ostringstream oss;
+    oss << std::setprecision(6) << std::noshowpoint << *value;
+    return oss.str();
 }
