@@ -1,20 +1,37 @@
-struct DoubleType
+#pragma once
+
+#include <string>
+#include "NumericType.h"
+
+struct FloatType;
+struct IntType;
+
+struct DoubleType : NumericType
 {
     DoubleType (double d) : value {new double (d)} { }
 
-    ~DoubleType() 
-    {
-        delete value;
-    }
+    ~DoubleType() override;
 
     operator double() const { return *value; }
+    operator float() const { return static_cast<float> (*value); }    
+    operator int() const { return static_cast<int> (*value); }
 
     DoubleType& add (double rhs);
-    DoubleType& divide (double rhs);    
+    DoubleType& divide (double rhs);
     DoubleType& multiply (double rhs);
+    DoubleType& pow (const double exponent);
+    DoubleType& pow (const DoubleType& exponent);
+    DoubleType& pow (const FloatType& exponent);
+    DoubleType& pow (const IntType& exponent);
     DoubleType& subtract (double rhs);
+
+    std::string toString() const override
+    {
+        return std::to_string (*value);
+    }
 
 private:
     double* value = nullptr;
 
+    DoubleType& powInternal (const double exponent);
 };

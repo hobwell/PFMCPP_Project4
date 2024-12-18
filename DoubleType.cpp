@@ -1,5 +1,13 @@
 #include <iostream>
+#include <cmath>
+#include "IntType.h"
 #include "DoubleType.h"
+#include "FloatType.h"
+
+DoubleType::~DoubleType()
+{
+    delete value;
+}
 
 DoubleType& DoubleType::add (double rhs)
 {
@@ -21,6 +29,34 @@ DoubleType& DoubleType::divide (double rhs)
 DoubleType& DoubleType::multiply (double rhs)
 {
     *value *= rhs;
+    return *this;
+}
+
+
+DoubleType& DoubleType::pow (double exponent)
+{
+    return powInternal (exponent);
+}
+
+DoubleType& DoubleType::pow (const DoubleType& exponent)
+{
+    return pow (static_cast<double> (exponent));
+}
+
+DoubleType& DoubleType::pow (const FloatType& exponent)
+{
+    return pow (static_cast<double> (exponent));
+}
+
+DoubleType& DoubleType::pow (const IntType& exponent)
+{
+    return pow (static_cast<double> (exponent));
+}
+
+DoubleType& DoubleType::powInternal (double exponent)
+{
+    *value = static_cast<double> (std::pow (*value, exponent));
+    
     return *this;
 }
 
