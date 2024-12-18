@@ -195,12 +195,45 @@ struct HeapA
 
 struct Point
 {
-    Point& multiply(float m)
+    Point (float x_, float y_) : x (x_), y (y_) { }
+
+    Point (const DoubleType& x_, const DoubleType& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
+    Point (const FloatType& x_, const FloatType& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
+    Point (const IntType& x_, const IntType& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
+
+    Point& multiply (const float m)
     {
         x *= m;
         y *= m;
         return *this;
     }
+
+    Point& multiply (const DoubleType& m)
+    {
+        x *= static_cast<float> (m);
+        y *= static_cast<float> (m);
+        return *this;
+    }
+
+    Point& multiply (const FloatType& m)
+    {
+        x *= static_cast<float> (m);
+        y *= static_cast<float> (m);
+        return *this;
+    }
+
+    Point& multiply (const IntType& m)
+    {
+        x *= static_cast<float> (m);
+        y *= static_cast<float> (m);
+        return *this;
+    }
+
+    void toString()
+    {
+        std::cout << "x: " << x << ", y: " << y << std::endl;
+    }
+
 private:
     float x{0}, y{0};
 };

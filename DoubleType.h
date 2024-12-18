@@ -1,6 +1,5 @@
 #pragma once
 
-#include <string>
 #include "NumericType.h"
 
 struct FloatType;
@@ -8,7 +7,7 @@ struct IntType;
 
 struct DoubleType : NumericType
 {
-    DoubleType (double d) : value {new double (d)} { }
+    explicit DoubleType (double d);
 
     ~DoubleType() override;
 
@@ -16,19 +15,16 @@ struct DoubleType : NumericType
     operator float() const { return static_cast<float> (*value); }    
     operator int() const { return static_cast<int> (*value); }
 
-    DoubleType& add (double rhs);
-    DoubleType& divide (double rhs);
-    DoubleType& multiply (double rhs);
+    DoubleType& add (const double rhs);
+    DoubleType& divide (const double rhs);
+    DoubleType& multiply (const double rhs);
     DoubleType& pow (const double exponent);
     DoubleType& pow (const DoubleType& exponent);
     DoubleType& pow (const FloatType& exponent);
     DoubleType& pow (const IntType& exponent);
-    DoubleType& subtract (double rhs);
+    DoubleType& subtract (const double rhs);
 
-    std::string toString() const override
-    {
-        return std::to_string (*value);
-    }
+    std::string toString() const override;
 
 private:
     double* value = nullptr;

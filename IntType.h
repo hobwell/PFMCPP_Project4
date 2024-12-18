@@ -1,28 +1,33 @@
+#pragma once
+
+#include "NumericType.h"
+
 struct DoubleType;
 struct FloatType;
 
-struct IntType
+struct IntType : NumericType
 {
-    IntType (int i) : value {new int (i)} { }
+    IntType (int i);
 
-    ~IntType() 
-    {
-        delete value;
-    }
+    ~IntType() override;
 
+    operator double() const { return static_cast<double> (*value); }
+    operator float() const { return static_cast<float> (*value); }    
     operator int() const { return *value; }
 
-    IntType& add (int rhs);
-    IntType& divide (int rhs);
-    IntType& multiply (int rhs);
+    IntType& add (const int rhs);
+    IntType& divide (const int rhs);
+    IntType& multiply (const int rhs);
     IntType& pow (int exponent);
     IntType& pow (const DoubleType& exponent);
     IntType& pow (const FloatType& exponent);
     IntType& pow (const IntType& exponent);
-    IntType& subtract (int rhs);
+    IntType& subtract (const int rhs);
+
+    std::string toString() const override;
 
 private:
     int* value;
 
-    IntType& powInternal (int exponent);
+    IntType& powInternal (const int exponent);
 };
