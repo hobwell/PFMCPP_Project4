@@ -13,10 +13,10 @@ struct IntType
     operator float() const { return static_cast<float> (*value); }
     operator int() const { return *value; }
 
-    IntType& operator+= (const int rhs);
-    IntType& operator-= (const int rhs);
-    IntType& operator*= (const int rhs);
-    IntType& operator/= (const int rhs);
+    IntType& operator+= (int rhs);
+    IntType& operator-= (int rhs);
+    IntType& operator*= (int rhs);
+    IntType& operator/= (int rhs);
 
     IntType& pow (int exponent);
     IntType& pow (const DoubleType& exponent);
@@ -27,5 +27,5 @@ struct IntType
 private:
     int* value;
 
-    IntType& powInternal (const int exponent);
+    IntType& powInternal (int exponent);
 };

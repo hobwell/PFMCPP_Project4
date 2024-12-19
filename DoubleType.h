@@ -18,7 +18,7 @@ struct DoubleType
     DoubleType& operator*= (double rhs);
     DoubleType& operator/= (double rhs);
     
-    DoubleType& pow (const double exponent);
+    DoubleType& pow (double exponent);
     DoubleType& pow (const DoubleType& exponent);
     DoubleType& pow (const FloatType& exponent);
     DoubleType& pow (const IntType& exponent);
@@ -27,5 +27,5 @@ struct DoubleType
 private:
     double* value = nullptr;
 
-    DoubleType& powInternal (const double exponent);
+    DoubleType& powInternal (double exponent);
 };

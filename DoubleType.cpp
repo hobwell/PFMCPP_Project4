@@ -31,7 +31,7 @@ DoubleType& DoubleType::operator*= (double rhs)
     return *this;
 }
 
-DoubleType& DoubleType::operator/= (const double rhs)
+DoubleType& DoubleType::operator/= (double rhs)
 {
     if (rhs == 0.0)
     {
@@ -42,7 +42,7 @@ DoubleType& DoubleType::operator/= (const double rhs)
     return *this;
 }
 
-DoubleType& DoubleType::pow (const double exponent)
+DoubleType& DoubleType::pow (double exponent)
 {
     return powInternal (exponent);
 }
@@ -62,7 +62,7 @@ DoubleType& DoubleType::pow (const IntType& exponent)
     return powInternal (exponent);
 }
 
-DoubleType& DoubleType::powInternal (const double exponent)
+DoubleType& DoubleType::powInternal (double exponent)
 {
     *value = static_cast<double> (std::pow (*value, exponent));
     

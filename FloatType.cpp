@@ -19,7 +19,7 @@ FloatType& FloatType::operator+= (float rhs)
     return *this;
 }
 
-FloatType& FloatType::operator-= (const float rhs)
+FloatType& FloatType::operator-= (float rhs)
 {
     *value -= rhs;
     return *this;
@@ -42,7 +42,7 @@ FloatType& FloatType::operator/= (float rhs)
     return *this;
 }
 
-FloatType& FloatType::pow (const float exponent)
+FloatType& FloatType::pow (float exponent)
 {
     return powInternal (exponent);
 }
@@ -62,7 +62,7 @@ FloatType& FloatType::pow (const IntType& exponent)
     return powInternal (exponent);
 }
 
-FloatType& FloatType::powInternal (const float exponent)
+FloatType& FloatType::powInternal (float exponent)
 {
     *value = static_cast<float> (std::pow (*value, exponent));
     

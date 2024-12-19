@@ -13,12 +13,12 @@ struct FloatType
     operator float() const { return *value; }
     operator int() const { return static_cast<int> (*value); }
 
-    FloatType& operator+= (const float rhs);
-    FloatType& operator-= (const float rhs);
-    FloatType& operator*= (const float rhs);
-    FloatType& operator/= (const float rhs);
+    FloatType& operator+= (float rhs);
+    FloatType& operator-= (float rhs);
+    FloatType& operator*= (float rhs);
+    FloatType& operator/= (float rhs);
    
-    FloatType& pow (const float exponent);
+    FloatType& pow (float exponent);
     FloatType& pow (const DoubleType& exponent);
     FloatType& pow (const FloatType& exponent);
     FloatType& pow (const IntType& exponent);
@@ -27,5 +27,5 @@ struct FloatType
 private:
     float* value = nullptr;
 
-    FloatType& powInternal (const float exponent);
+    FloatType& powInternal (float exponent);
 };
