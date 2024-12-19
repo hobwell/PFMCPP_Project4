@@ -1,3 +1,4 @@
+#include <functional>
 #include <iostream>
 #include <cmath>
 #include "IntType.h"
@@ -39,6 +40,26 @@ FloatType& FloatType::operator/= (float rhs)
     }
     
     *value /= rhs;
+    return *this;
+}
+
+FloatType& FloatType::apply(std::function<FloatType& (float&)> func)
+{
+    if (func)
+    {
+        return func(*value);
+    }
+
+    return *this;
+}
+
+FloatType& FloatType::apply(void (*func) (float&))
+{
+    if (func)
+    {
+        func(*value);
+    }
+
     return *this;
 }
 
