@@ -1,3 +1,4 @@
+#include <functional>
 #include <iostream>
 #include <cmath>
 #include "IntType.h"
@@ -42,6 +43,26 @@ IntType& IntType::operator/= (int rhs)
         *value /= rhs;    
     }
     
+    return *this;
+}
+
+IntType& IntType::apply(std::function<IntType& (int&)> func)
+{
+    if (func)
+    {
+        return func(*value);
+    }
+
+    return *this;
+}
+
+IntType& IntType::apply(void (*func) (int&))
+{
+    if (func)
+    {
+        func(*value);
+    }
+
     return *this;
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 struct DoubleType;
 struct IntType;
 
@@ -17,12 +19,14 @@ struct FloatType
     FloatType& operator-= (float rhs);
     FloatType& operator*= (float rhs);
     FloatType& operator/= (float rhs);
-   
+
+    FloatType& apply (std::function<FloatType& (float&)>);
+    FloatType& apply (void (*) (float&));
+
     FloatType& pow (float exponent);
     FloatType& pow (const DoubleType& exponent);
     FloatType& pow (const FloatType& exponent);
     FloatType& pow (const IntType& exponent);
-    
 
 private:
     float* value = nullptr;

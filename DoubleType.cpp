@@ -1,3 +1,4 @@
+#include <functional>
 #include <iostream>
 #include <cmath>
 #include "IntType.h"
@@ -39,6 +40,26 @@ DoubleType& DoubleType::operator/= (double rhs)
     }
     
     *value /= rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::apply(std::function<DoubleType& (double&)> func)
+{
+    if (func)
+    {
+        return func(*value);
+    }
+
+    return *this;
+}
+
+DoubleType& DoubleType::apply(void (*func) (double&))
+{
+    if (func)
+    {
+        func(*value);
+    }
+
     return *this;
 }
 
