@@ -1,15 +1,13 @@
 #pragma once
 
-#include "NumericType.h"
-
 struct DoubleType;
 struct FloatType;
 
-struct IntType : NumericType
+struct IntType
 {
     IntType (int i);
 
-    ~IntType() override;
+    ~IntType();
 
     operator double() const { return static_cast<double> (*value); }
     operator float() const { return static_cast<float> (*value); }    
@@ -23,8 +21,6 @@ struct IntType : NumericType
     IntType& pow (const FloatType& exponent);
     IntType& pow (const IntType& exponent);
     IntType& subtract (const int rhs);
-
-    std::string toString() const override;
 
 private:
     int* value;

@@ -71,8 +71,3 @@ IntType& IntType::subtract (const int rhs)
     *value -= rhs;
     return *this;
 }
-
-std::string IntType::toString() const
-{
-    return std::to_string (*value);
-}
