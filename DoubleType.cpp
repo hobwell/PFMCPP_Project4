@@ -4,7 +4,7 @@
 #include "DoubleType.h"
 #include "FloatType.h"
 
-DoubleType::DoubleType (const double d) : 
+DoubleType::DoubleType (double d) : 
     value {new double (d)} 
 {}
 
@@ -13,13 +13,25 @@ DoubleType::~DoubleType()
     delete value;
 }
 
-DoubleType& DoubleType::add (const double rhs)
+DoubleType& DoubleType::operator+= (double rhs)
 {
     *value += rhs;
     return *this;
 }
 
-DoubleType& DoubleType::divide (const double rhs)
+DoubleType& DoubleType::operator-= (double rhs)
+{
+    *value -= rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::operator*= (double rhs)
+{
+    *value *= rhs;
+    return *this;
+}
+
+DoubleType& DoubleType::operator/= (double rhs)
 {
     if (rhs == 0.0)
     {
@@ -30,13 +42,7 @@ DoubleType& DoubleType::divide (const double rhs)
     return *this;
 }
 
-DoubleType& DoubleType::multiply (const double rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-DoubleType& DoubleType::pow (const double exponent)
+DoubleType& DoubleType::pow (double exponent)
 {
     return powInternal (exponent);
 }
@@ -56,15 +62,9 @@ DoubleType& DoubleType::pow (const IntType& exponent)
     return powInternal (exponent);
 }
 
-DoubleType& DoubleType::powInternal (const double exponent)
+DoubleType& DoubleType::powInternal (double exponent)
 {
     *value = static_cast<double> (std::pow (*value, exponent));
     
-    return *this;
-}
-
-DoubleType& DoubleType::subtract (const double rhs)
-{
-    *value -= rhs;
     return *this;
 }

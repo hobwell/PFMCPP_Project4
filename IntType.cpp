@@ -13,13 +13,25 @@ IntType::~IntType()
     delete value;
 }
 
-IntType& IntType::add (const int rhs)
+IntType& IntType::operator+= (int rhs)
 {
     *value += rhs;
     return *this;
 }
 
-IntType& IntType::divide (const int rhs)
+IntType& IntType::operator-= (int rhs)
+{
+    *value -= rhs;
+    return *this;
+}
+
+IntType& IntType::operator*= (int rhs)
+{
+    *value *= rhs;
+    return *this;
+}
+
+IntType& IntType::operator/= (int rhs)
 {
     if (rhs == 0)
     {
@@ -33,13 +45,7 @@ IntType& IntType::divide (const int rhs)
     return *this;
 }
 
-IntType& IntType::multiply (const int rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-IntType& IntType::pow (const int exponent)
+IntType& IntType::pow (int exponent)
 {
     return powInternal (exponent);
 }
@@ -59,15 +65,9 @@ IntType& IntType::pow (const IntType& exponent)
     return powInternal (exponent);
 }
 
-IntType& IntType::powInternal (const int exponent)
+IntType& IntType::powInternal (int exponent)
 {
     *value = static_cast<int> (std::pow (*value, exponent));
     
-    return *this;
-}
-
-IntType& IntType::subtract (const int rhs)
-{
-    *value -= rhs;
     return *this;
 }

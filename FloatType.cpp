@@ -13,13 +13,25 @@ FloatType::~FloatType()
     delete value;
 }
 
-FloatType& FloatType::add (float rhs)
+FloatType& FloatType::operator+= (float rhs)
 {
     *value += rhs;
     return *this;
 }
 
-FloatType& FloatType::divide (float rhs)
+FloatType& FloatType::operator-= (float rhs)
+{
+    *value -= rhs;
+    return *this;
+}
+
+FloatType& FloatType::operator*= (float rhs)
+{
+    *value *= rhs;
+    return *this;
+}
+
+FloatType& FloatType::operator/= (float rhs)
 {
     if (rhs == 0.0f)
     {
@@ -30,13 +42,7 @@ FloatType& FloatType::divide (float rhs)
     return *this;
 }
 
-FloatType& FloatType::multiply (float rhs)
-{
-    *value *= rhs;
-    return *this;
-}
-
-FloatType& FloatType::pow (const float exponent)
+FloatType& FloatType::pow (float exponent)
 {
     return powInternal (exponent);
 }
@@ -56,15 +62,9 @@ FloatType& FloatType::pow (const IntType& exponent)
     return powInternal (exponent);
 }
 
-FloatType& FloatType::powInternal (const float exponent)
+FloatType& FloatType::powInternal (float exponent)
 {
     *value = static_cast<float> (std::pow (*value, exponent));
     
-    return *this;
-}
-
-FloatType& FloatType::subtract (const float rhs)
-{
-    *value -= rhs;
     return *this;
 }
