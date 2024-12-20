@@ -458,11 +458,13 @@ void part7()
     // steps 8 - 10
     Numeric<double> step8(23.0); // step 8
 
+    // // PLEASE HELP: I couldn't figure out how to do this without creating an lvalue
     auto necessaryLValue = [&dt = step8] (decltype(step8)::Type& value) -> Numeric<decltype(step8)::Type>&
     {
-        value += 23.0;
+        value += 5.0;
         // step 10
-        std::cout << "Step 10: Make the lambda use your explicit template instance: " << static_cast<double> (dt) << std::endl;
+        dt += 14.0;
+        std::cout << "Step 10: Make the lambda use your explicit template instance: " << static_cast<double> (dt) << " (woah!)" << std::endl;
         return dt;
     };
 
@@ -476,7 +478,7 @@ void part7()
     std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
 
     {
-        //using Type = float;
+        //using Type = float;  // PLEASE HELP: I'm not sure what the point of this line is
         ft3.apply( 
             [&ft = ft3] (decltype(ft3)::Type& value) -> Numeric<decltype(ft3)::Type>&
             {
@@ -498,6 +500,7 @@ void part7()
 
     {
         //using Type = double;
+        // PLEASE HELP: I couldn't figure out how to do this without creating an lvalue
         auto neededLValue = [&dt = dt3] (decltype(dt3)::Type& value) -> Numeric<decltype(dt3)::Type>&
             { 
                 value += 6.0;

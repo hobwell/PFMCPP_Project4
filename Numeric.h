@@ -37,26 +37,30 @@ struct Numeric
 
     Numeric& operator/= (Type rhs)
     {
-//        if constexpr (std::is_same<int, Type>::value)
-//        {
-//            if constexpr (std::is_same<int, decltype(rhs)>::value)
-//            {
-//                if constexpr (rhs == 0)
-//                {
-//                    std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
-//                    return *this;
-//                }
-//            }
-//            else if constexpr (rhs < std::numeric_limits<decltype(rhs)>::epsilon)
-//            {
-//                std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
-//                return *this;
-//            }
-//        }
-//        else if constexpr (rhs < std::numeric_limits<Type>::epsilon)
-//        {
-//            std::cout << "warning: floating point division by zero!" << std::endl;
-//        }
+        if constexpr (std::is_same<int, Type>::value)
+        {
+            // PLEASE HELP: The instructions indicated that I need to check if rhs is an int, 
+            // independantly of the template type.  I don't understand how rhs can be a 
+            // different type than Type. Aren't they the same by definition?
+            if constexpr (std::is_same<int, decltype(rhs)>::value)
+            {
+                if (rhs == 0)
+                {
+                    std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
+                    return *this;
+                }
+            }
+            else if constexpr (rhs < std::numeric_limits<decltype(rhs)>::epsilon())
+            {
+                // PLEASE HELP: given the above, I'm not sure how to get to this case.
+                std::cout << "can't divide integers by zero!" << std::endl;
+                return *this;
+            }
+        }
+        else if (rhs < std::numeric_limits<Type>::epsilon())
+        {
+            std::cout << "warning: floating point division by zero!" << std::endl;
+        }
 
         *value /= rhs;
         return *this;
@@ -138,7 +142,7 @@ struct Numeric<double>
     {
         if (rhs == 0.0)
         {
-            std::cout << "warning: division by zero!" << std::endl;
+            std::cout << "warning: floating point division by zero!" << std::endl;
         }
         
         *value /= rhs;
