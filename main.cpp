@@ -81,7 +81,7 @@ If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptas
 #include <iostream>
 #include <memory>
 #include "Numeric.h"
-/*
+
 void part7()
 {
     Numeric ft3(3.0f);
@@ -92,12 +92,12 @@ void part7()
     std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
 
     {
-        using Type = float;
+        //using Type = float;
         ft3.apply( 
-            [&ft = ft3] (std::unique_ptr<decltype(ft3)::Type> value)
+            [&ft = ft3] (std::unique_ptr<decltype(ft3)::Type> value) -> Numeric<decltype(ft3)::Type>&
             {
                 *value += 7.0f;
-                return &ft;
+                return ft;
             }
         );
     }
@@ -138,7 +138,7 @@ void part7()
     std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 }
-*/
+
 
 /*
 your program should generate the following output EXACTLY.
