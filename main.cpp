@@ -392,7 +392,7 @@ void part4()
 template <typename T>
 void myNumericFreeFunct(T& t)
 {
-    t += 6;
+    t += 7;
 }
 
 /*
@@ -454,6 +454,20 @@ void part6()
 
 void part7()
 {
+    
+    // steps 8 - 10
+    Numeric<double> step8(23.0); // step 8
+
+    auto necessaryLValue = [&dt = step8] (decltype(step8)::Type& value) -> Numeric<decltype(step8)::Type>&
+    {
+        value += 23.0;
+        // step 10
+        std::cout << "Step 10: Make the lambda use your explicit template instance: " << static_cast<double> (dt) << std::endl;
+        return dt;
+    };
+
+    step8.apply(necessaryLValue).apply(myNumericFreeFunct<double>); // step 9
+    
     Numeric ft3(3.0f);
     Numeric dt3(4.0);
     Numeric it3(5);
@@ -462,7 +476,7 @@ void part7()
     std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
 
     {
-        using Type = float;
+        //using Type = float;
         ft3.apply( 
             [&ft = ft3] (decltype(ft3)::Type& value) -> Numeric<decltype(ft3)::Type>&
             {
@@ -483,14 +497,13 @@ void part7()
     std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
 
     {
-        using Type = double;
-        dt3.apply( 
-             [&dt = dt3] (decltype(dt3)::Type& value) -> Numeric<decltype(dt3)::Type>&
-            {
+        //using Type = double;
+        auto neededLValue = [&dt = dt3] (decltype(dt3)::Type& value) -> Numeric<decltype(dt3)::Type>&
+            { 
                 value += 6.0;
                 return dt;
-            }
-        ); // This calls the templated apply fcn
+            };
+        dt3.apply(neededLValue); // This calls the templated apply fcn
     }
     
     std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
@@ -504,7 +517,7 @@ void part7()
     std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
 
     {
-        using Type = double;
+        //using Type = double;
         it3.apply( 
             [&it = it3] (decltype(it3)::Type& value) -> Numeric<decltype(it3)::Type>&
             {
@@ -591,7 +604,9 @@ int main()
     part4();
 
     // part6();
-    
+
+    part7();
+
     std::cout << "good to go!\n";
 
     return 0;
