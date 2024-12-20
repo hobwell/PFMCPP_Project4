@@ -79,6 +79,8 @@ If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptas
 */
 
 #include <iostream>
+#include "Numeric.h"
+
 void part7()
 {
     Numeric ft3(3.0f);
@@ -86,47 +88,47 @@ void part7()
     Numeric it3(5);
     
     std::cout << "Calling Numeric<float>::apply() using a lambda (adds 7.0f) and Numeric<float> as return type:" << std::endl;
-    std::cout << "ft3 before: " << ft3 << std::endl;
+    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
 
     {
         using Type = #4;
         ft3.apply( [](std::unique...){} );
     }
 
-    std::cout << "ft3 after: " << ft3 << std::endl;
+    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
     std::cout << "Calling Numeric<float>::apply() twice using a free function (adds 7.0f) and void as return type:" << std::endl;
-    std::cout << "ft3 before: " << ft3 << std::endl;
+    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
     ft3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
-    std::cout << "ft3 after: " << ft3 << std::endl;
+    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
     std::cout << "---------------------\n" << std::endl;
 
     std::cout << "Calling Numeric<double>::apply() using a lambda (adds 6.0) and Numeric<double> as return type:" << std::endl;
-    std::cout << "dt3 before: " << dt3 << std::endl;
+    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
 
     {
         using Type = #4;
         dt3.apply( [](std::unique...){} ); // This calls the templated apply fcn
     }
     
-    std::cout << "dt3 after: " << dt3 << std::endl;
+    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
     std::cout << "Calling Numeric<double>::apply() twice using a free function (adds 7.0) and void as return type:" << std::endl;
-    std::cout << "dt3 before: " << dt3 << std::endl;
+    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
     dt3.apply(myNumericFreeFunct<double>).apply(myNumericFreeFunct<double>); // This calls the templated apply fcn
-    std::cout << "dt3 after: " << dt3 << std::endl;
+    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
     std::cout << "---------------------\n" << std::endl;
 
     std::cout << "Calling Numeric<int>::apply() using a lambda (adds 5) and Numeric<int> as return type:" << std::endl;
-    std::cout << "it3 before: " << it3 << std::endl;
+    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
 
     {
         using Type = #4;
         it3.apply( [](std::unique...){} );
     }
-    std::cout << "it3 after: " << it3 << std::endl;
+    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
     std::cout << "Calling Numeric<int>::apply() twice using a free function (adds 7) and void as return type:" << std::endl;
-    std::cout << "it3 before: " << it3 << std::endl;
+    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
     it3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
-    std::cout << "it3 after: " << it3 << std::endl;
+    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 }
 
@@ -180,21 +182,21 @@ can't divide integers by zero!
 505521
 FloatType x IntType  =  13143546
 (IntType + DoubleType + FloatType) x 24 = 315447336
-Power tests with FloatType 
+Power tests with FloatType
 pow(ft1, floatExp) = 2^2 = 4
 pow(ft1, itExp) = 4^2 = 16
 pow(ft1, ftExp) = 16^2 = 256
 pow(ft1, dtExp) = 256^2 = 65536
 ---------------------
 
-Power tests with DoubleType 
+Power tests with DoubleType
 pow(dt1, doubleExp) = 2^2 = 4
 pow(dt1, itExp) = 4^2 = 16
 pow(dt1, ftExp) = 16^2 = 256
 pow(dt1, dtExp) = 256^2 = 65536
 ---------------------
 
-Power tests with IntType 
+Power tests with IntType
 pow(it1, intExp) = 2^2 = 4
 pow(it1, itExp) = 4^2 = 16
 pow(it1, ftExp) = 16^2 = 256
@@ -255,11 +257,6 @@ good to go!
 Use a service like https://www.diffchecker.com/diff to compare your output. 
 */
 
-#include <iostream>
-#include "DoubleType.h"
-#include "FloatType.h"
-#include "IntType.h"
-
 void part3()
 {
     FloatType ft( 5.5f );
@@ -303,14 +300,14 @@ void part3()
 struct A {};
 struct HeapA
 { 
-    HeapA() : a(new A) {}
+    HeapA() : a(std::make_unique<A>()) {}
 
     ~HeapA()
     {
-        delete a;
+        //delete a; // no longer needed - unique_ptr will take care of it!
     }
 
-    A* a = nullptr;
+    std::unique_ptr<A> a = nullptr;
 };
 
 struct Point
@@ -456,7 +453,7 @@ void myIntFreeFunct(int& i)
 {
     i += 5;
 }
-
+/*
 void part6()
 {
     FloatType ft3(3.0f);
@@ -511,7 +508,7 @@ void part6()
     std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 }
-
+*/
 
 int main()
 {   
@@ -581,7 +578,7 @@ int main()
     
     part4();
 
-    part6();
+    // part6();
     
     std::cout << "good to go!\n";
 
