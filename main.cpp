@@ -82,64 +82,6 @@ If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptas
 #include <memory>
 #include "Numeric.h"
 
-void part7()
-{
-    Numeric ft3(3.0f);
-    Numeric dt3(4.0);
-    Numeric it3(5);
-    
-    std::cout << "Calling Numeric<float>::apply() using a lambda (adds 7.0f) and Numeric<float> as return type:" << std::endl;
-    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
-
-    {
-        //using Type = float;
-        ft3.apply( 
-            [&ft = ft3] (std::unique_ptr<decltype(ft3)::Type> value) -> Numeric<decltype(ft3)::Type>&
-            {
-                *value += 7.0f;
-                return ft;
-            }
-        );
-    }
-
-    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
-    std::cout << "Calling Numeric<float>::apply() twice using a free function (adds 7.0f) and void as return type:" << std::endl;
-    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
-    ft3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
-    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
-    std::cout << "---------------------\n" << std::endl;
-
-    std::cout << "Calling Numeric<double>::apply() using a lambda (adds 6.0) and Numeric<double> as return type:" << std::endl;
-    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
-
-    {
-        using Type = #4;
-        dt3.apply( [](std::unique...){} ); // This calls the templated apply fcn
-    }
-    
-    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
-    std::cout << "Calling Numeric<double>::apply() twice using a free function (adds 7.0) and void as return type:" << std::endl;
-    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
-    dt3.apply(myNumericFreeFunct<double>).apply(myNumericFreeFunct<double>); // This calls the templated apply fcn
-    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
-    std::cout << "---------------------\n" << std::endl;
-
-    std::cout << "Calling Numeric<int>::apply() using a lambda (adds 5) and Numeric<int> as return type:" << std::endl;
-    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
-
-    {
-        using Type = #4;
-        it3.apply( [](std::unique...){} );
-    }
-    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
-    std::cout << "Calling Numeric<int>::apply() twice using a free function (adds 7) and void as return type:" << std::endl;
-    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
-    it3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
-    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
-    std::cout << "---------------------\n" << std::endl;    
-}
-
-
 /*
 your program should generate the following output EXACTLY.
 This includes the warnings. 
@@ -368,8 +310,8 @@ void part4()
     // ------------------------------------------------------------
     //                          Power tests
     // ------------------------------------------------------------
-    Numeric ft1(2);
-    Numeric dt1(2);
+    Numeric ft1(2.f);
+    Numeric dt1(2.0);
     Numeric it1(2);    
     float floatExp = 2.0f;
     double doubleExp = 2.0;
@@ -447,20 +389,12 @@ void part4()
     std::cout << "---------------------\n" << std::endl;
 }
 
-void myDoubleFreeFunct(double& d)
+template <typename T>
+void myNumericFreeFunct(T& t)
 {
-    d += 6;
+    t += 6;
 }
 
-void myFloatFreeFunct(float& f)
-{
-    f += 7;
-}
-
-void myIntFreeFunct(int& i)
-{
-    i += 5;
-}
 /*
 void part6()
 {
@@ -518,6 +452,76 @@ void part6()
 }
 */
 
+void part7()
+{
+    Numeric ft3(3.0f);
+    Numeric dt3(4.0);
+    Numeric it3(5);
+    
+    std::cout << "Calling Numeric<float>::apply() using a lambda (adds 7.0f) and Numeric<float> as return type:" << std::endl;
+    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
+
+    {
+        using Type = float;
+        ft3.apply( 
+            [&ft = ft3] (decltype(ft3)::Type& value) -> Numeric<decltype(ft3)::Type>&
+            {
+                value += 7.0f;
+                return ft;
+            }
+        );
+    }
+
+    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
+    std::cout << "Calling Numeric<float>::apply() twice using a free function (adds 7.0f) and void as return type:" << std::endl;
+    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
+    ft3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
+    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
+    std::cout << "---------------------\n" << std::endl;
+
+    std::cout << "Calling Numeric<double>::apply() using a lambda (adds 6.0) and Numeric<double> as return type:" << std::endl;
+    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
+
+    {
+        using Type = double;
+        dt3.apply( 
+             [&dt = dt3] (decltype(dt3)::Type& value) -> Numeric<decltype(dt3)::Type>&
+            {
+                value += 6.0;
+                return dt;
+            }
+        ); // This calls the templated apply fcn
+    }
+    
+    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
+    std::cout << "Calling Numeric<double>::apply() twice using a free function (adds 7.0) and void as return type:" << std::endl;
+    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
+    dt3.apply(myNumericFreeFunct<double>).apply(myNumericFreeFunct<double>); // This calls the templated apply fcn
+    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
+    std::cout << "---------------------\n" << std::endl;
+
+    std::cout << "Calling Numeric<int>::apply() using a lambda (adds 5) and Numeric<int> as return type:" << std::endl;
+    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
+
+    {
+        using Type = double;
+        it3.apply( 
+            [&it = it3] (decltype(it3)::Type& value) -> Numeric<decltype(it3)::Type>&
+            {
+                value += 5;
+                return it;
+            }   
+        );
+    }
+    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
+    std::cout << "Calling Numeric<int>::apply() twice using a free function (adds 7) and void as return type:" << std::endl;
+    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
+    it3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
+    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
+    std::cout << "---------------------\n" << std::endl;    
+}
+
+
 int main()
 {   
     //testing instruction 0
@@ -525,7 +529,7 @@ int main()
 
     //assign heap primitives
     Numeric ft ( 2.0f );
-    Numeric dt ( 2 );
+    Numeric dt ( 2.0 );
     Numeric it ( 2 ) ;
 
     std::cout << "FloatType add result=" << static_cast<float> (ft += 2.f) << std::endl;

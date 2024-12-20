@@ -11,7 +11,7 @@ struct Numeric
 
     Numeric (Type t) : value (std::make_unique<Type>(t)) {}
 
-    ~Numeric();
+    ~Numeric() {}
 
     operator double() const { return static_cast<double> (*value); }
     operator float() const { return static_cast<float> (*value); }
@@ -37,7 +37,7 @@ struct Numeric
 
     Numeric& operator/= (Type rhs)
     {
-        if (rhs == 0.0)
+        if (rhs == 0)
         {
             std::cout << "warning: division by zero!" << std::endl;
         }
@@ -86,3 +86,8 @@ private:
         return *this;
     }
 };
+
+
+// Deduction guide
+template <typename T>
+Numeric(T) -> Numeric<T>;
