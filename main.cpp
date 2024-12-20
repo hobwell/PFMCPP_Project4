@@ -79,8 +79,9 @@ If you need to view an example, see: https://bitbucket.org/MatkatMusic/pfmcpptas
 */
 
 #include <iostream>
+#include <memory>
 #include "Numeric.h"
-
+/*
 void part7()
 {
     Numeric ft3(3.0f);
@@ -91,8 +92,14 @@ void part7()
     std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
 
     {
-        using Type = #4;
-        ft3.apply( [](std::unique...){} );
+        using Type = float;
+        ft3.apply( 
+            [&ft = ft3] (std::unique_ptr<decltype(ft3)::Type> value)
+            {
+                *value += 7.0f;
+                return &ft;
+            }
+        );
     }
 
     std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
@@ -131,6 +138,7 @@ void part7()
     std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
     std::cout << "---------------------\n" << std::endl;    
 }
+*/
 
 /*
 your program should generate the following output EXACTLY.
@@ -259,10 +267,10 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 
 void part3()
 {
-    FloatType ft( 5.5f );
-    DoubleType dt( 11.1 );
-    IntType it ( 34 );
-    DoubleType pi( 3.14 );
+    Numeric ft( 5.5f );
+    Numeric dt( 11.1 );
+    Numeric it ( 34 );
+    Numeric pi( 3.14 );
 
     ft *= ft;
     ft *= ft;
@@ -314,9 +322,9 @@ struct Point
 {
     Point (float x_, float y_) : x (x_), y (y_) { }
 
-    Point (const DoubleType& x_, const DoubleType& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
-    Point (const FloatType& x_, const FloatType& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
-    Point (const IntType& x_, const IntType& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
+    Point (const Numeric<double>& x_, const Numeric<double>& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
+    Point (const Numeric<float>& x_, const Numeric<float>& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
+    Point (const Numeric<int>& x_, const Numeric<int>& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
 
     Point& multiply (const float m)
     {
@@ -325,21 +333,21 @@ struct Point
         return *this;
     }
 
-    Point& multiply (const DoubleType& m)
+    Point& multiply (const Numeric<double>& m)
     {
         x *= static_cast<float> (m);
         y *= static_cast<float> (m);
         return *this;
     }
 
-    Point& multiply (const FloatType& m)
+    Point& multiply (const Numeric<float>& m)
     {
         x *= static_cast<float> (m);
         y *= static_cast<float> (m);
         return *this;
     }
 
-    Point& multiply (const IntType& m)
+    Point& multiply (const Numeric<int>& m)
     {
         x *= static_cast<float> (m);
         y *= static_cast<float> (m);
@@ -360,15 +368,15 @@ void part4()
     // ------------------------------------------------------------
     //                          Power tests
     // ------------------------------------------------------------
-    FloatType ft1(2);
-    DoubleType dt1(2);
-    IntType it1(2);    
+    Numeric ft1(2);
+    Numeric dt1(2);
+    Numeric it1(2);    
     float floatExp = 2.0f;
     double doubleExp = 2.0;
     int intExp = 2;
-    IntType itExp(2);
-    FloatType ftExp(2.0f);
-    DoubleType dtExp(2.0);
+    Numeric itExp(2);
+    Numeric ftExp(2.0f);
+    Numeric dtExp(2.0);
     
     // Power tests with FloatType
     std::cout << "Power tests with FloatType" << std::endl;
@@ -397,14 +405,14 @@ void part4()
     // ------------------------------------------------------------
     //                          Point tests
     // ------------------------------------------------------------
-    FloatType ft2(3.0f);
-    DoubleType dt2(4.0);
-    IntType it2(5);
+    Numeric ft2(3.0f);
+    Numeric dt2(4.0);
+    Numeric it2(5);
     float floatMul = 6.0f;
 
     // Point tests with float
     std::cout << "Point tests with float argument:" << std::endl;
-    Point p0(ft2, floatMul);
+    Point p0(static_cast<float> (ft2), floatMul);
     p0.toString();   
     std::cout << "Multiplication factor: " << floatMul << std::endl;
     p0.multiply(floatMul); 
@@ -422,7 +430,7 @@ void part4()
 
     // Point tests with DoubleType
     std::cout << "Point tests with DoubleType argument:" << std::endl;
-    Point p2(ft2, static_cast<float>(dt2));
+    Point p2(static_cast<float>(ft2), static_cast<float>(dt2));
     p2.toString();   
     std::cout << "Multiplication factor: " << static_cast<double> (dt2) << std::endl;
     p2.multiply(dt2); 
@@ -431,7 +439,7 @@ void part4()
 
     // Point tests with IntType
     std::cout << "Point tests with IntType argument:" << std::endl;
-    Point p3(ft2, static_cast<float>(dt2));
+    Point p3(static_cast<float>(ft2), static_cast<float>(dt2));
     p3.toString();   
     std::cout << "Multiplication factor: " << static_cast<int> (it2) << std::endl;
     p3.multiply(it2); 
@@ -463,10 +471,10 @@ void part6()
     std::cout << "Calling FloatType::apply() using a lambda (adds 7.0f) and FloatType as return type:" << std::endl;
     std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
     ft3.apply (
-        [&ft = ft3] (float& val) -> FloatType&
+        [&ft = ft3] (float& val)
         { 
             val += 7; 
-            return ft; 
+            return &ft; 
         } 
     );
     std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
@@ -482,7 +490,7 @@ void part6()
         [&dt = dt3] (double& d) -> DoubleType&
         {
             d += 6.0;
-            return dt;
+            return &dt;
         }
     );
     std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
@@ -498,7 +506,7 @@ void part6()
         [&it = it3] (int& i) -> IntType&
         {
             i += 5;
-            return it;
+            return &it;
         } 
     );
     std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
@@ -516,9 +524,9 @@ int main()
     HeapA heapA; 
 
     //assign heap primitives
-    FloatType ft ( 2.0f );
-    DoubleType dt ( 2 );
-    IntType it ( 2 ) ;
+    Numeric ft ( 2.0f );
+    Numeric dt ( 2 );
+    Numeric it ( 2 ) ;
 
     std::cout << "FloatType add result=" << static_cast<float> (ft += 2.f) << std::endl;
     std::cout << "FloatType subtract result=" << static_cast<float> (ft -= 2.f) << std::endl;
