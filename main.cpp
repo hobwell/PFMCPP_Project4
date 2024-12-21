@@ -478,7 +478,7 @@ void part7()
     std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
 
     {
-        //using Type = float;  // PLEASE HELP: I'm not sure what the point of this line is
+        //using Type = float;  // PLEASE HELP: I'm not sure what the point of this line was
         ft3.apply( 
             [&ft = ft3] (decltype(ft3)::Type& value) -> Numeric<decltype(ft3)::Type>&
             {
@@ -499,7 +499,7 @@ void part7()
     std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
 
     {
-        //using Type = double;
+        //using Type = double; // PLEASE HELP: I'm not sure what the point of this line was
         // PLEASE HELP: I couldn't figure out how to do this without creating an lvalue
         auto neededLValue = [&dt = dt3] (decltype(dt3)::Type& value) -> Numeric<decltype(dt3)::Type>&
             { 
@@ -520,7 +520,7 @@ void part7()
     std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
 
     {
-        //using Type = double;
+        //using Type = double; // PLEASE HELP: I'm not sure what the point of this line was
         it3.apply( 
             [&it = it3] (decltype(it3)::Type& value) -> Numeric<decltype(it3)::Type>&
             {

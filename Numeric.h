@@ -11,6 +11,8 @@ struct Numeric
 
     Numeric (Type t) : value (std::make_unique<Type>(t)) {}
 
+    Numeric(const Numeric& other) : value (std::make_unique<Type>(*other.value)) {}
+
     ~Numeric() {}
 
     operator double() const { return static_cast<double> (*value); }
@@ -35,13 +37,12 @@ struct Numeric
         return *this;
     }
 
-    Numeric& operator/= (Type rhs)
+    template <typename RHS>
+    // PLEASE NOTE: Not sure if the intention was to need a template here, but I couldn't figure out how to do it without it.
+    Numeric& operator/= (RHS rhs)
     {
         if constexpr (std::is_same<int, Type>::value)
         {
-            // PLEASE HELP: The instructions indicated that I need to check if rhs is an int, 
-            // independantly of the template type.  I don't understand how rhs can be a 
-            // different type than Type. Aren't they the same by definition?
             if constexpr (std::is_same<int, decltype(rhs)>::value)
             {
                 if (rhs == 0)
@@ -50,19 +51,18 @@ struct Numeric
                     return *this;
                 }
             }
-            else if constexpr (rhs < std::numeric_limits<decltype(rhs)>::epsilon())
+            else if (static_cast<float> (rhs) < std::numeric_limits<float>::epsilon())
             {
-                // PLEASE HELP: given the above, I'm not sure how to get to this case.
                 std::cout << "can't divide integers by zero!" << std::endl;
                 return *this;
             }
         }
-        else if (rhs < std::numeric_limits<Type>::epsilon())
+        else if (static_cast<float> (rhs) < std::numeric_limits<float>::epsilon())
         {
             std::cout << "warning: floating point division by zero!" << std::endl;
         }
 
-        *value /= rhs;
+        *value /= static_cast<Type> (rhs);
         return *this;
     }
 
@@ -113,6 +113,8 @@ struct Numeric<double>
     using Type = double;
 
     Numeric (Type t) : value (std::make_unique<Type>(t)) {}
+
+    Numeric(const Numeric& other) : value (std::make_unique<Type>(*other.value)) {}
 
     ~Numeric() {}
 
