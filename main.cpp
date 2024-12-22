@@ -458,17 +458,21 @@ void part7()
     // steps 8 - 10
     Numeric<double> step8(23.0); // step 8
 
-    // // PLEASE HELP: I couldn't figure out how to do this without creating an lvalue
-    auto necessaryLValue = [&dt = step8] (decltype(step8)::Type& value) -> Numeric<decltype(step8)::Type>&
-    {
-        value += 5.0;
-        // step 10
-        dt += 14.0;
-        std::cout << "Step 10: Make the lambda use your explicit template instance: " << static_cast<double> (dt) << " (woah!)" << std::endl;
-        return dt;
-    };
-
-    step8.apply(necessaryLValue).apply(myNumericFreeFunct<double>); // step 9
+    {        
+        using numericType = decltype(step8)::Type;
+        using returnType = decltype(step8);
+            
+        // Note: I couldn't figure out how to do this without creating an lvalue
+        auto necessaryLValue = [&dt = step8] (numericType& value) -> returnType&
+        {
+            value += 5.0;
+            // step 10
+            dt += 14.0;
+            return dt;
+        };
+    
+        step8.apply(necessaryLValue).apply(myNumericFreeFunct<double>); // step 9
+    }
     
     Numeric ft3(3.0f);
     Numeric dt3(4.0);
@@ -478,9 +482,11 @@ void part7()
     std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
 
     {
-        //using Type = float;  // PLEASE HELP: I'm not sure what the point of this line was
+        using numericType = decltype(ft3)::Type;
+        using returnType = decltype(ft3);
+        
         ft3.apply( 
-            [&ft = ft3] (decltype(ft3)::Type& value) -> Numeric<decltype(ft3)::Type>&
+            [&ft = ft3] (numericType& value) -> returnType&
             {
                 value += 7.0f;
                 return ft;
@@ -499,9 +505,11 @@ void part7()
     std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
 
     {
-        //using Type = double; // PLEASE HELP: I'm not sure what the point of this line was
-        // PLEASE HELP: I couldn't figure out how to do this without creating an lvalue
-        auto neededLValue = [&dt = dt3] (decltype(dt3)::Type& value) -> Numeric<decltype(dt3)::Type>&
+        using numericType = decltype(dt3)::Type;
+        using returnType = decltype(dt3);
+        // NOTE: I couldn't figure out how to do this without creating an lvalue
+        auto neededLValue = 
+            [&dt = dt3] (numericType& value) -> returnType&
             { 
                 value += 6.0;
                 return dt;
@@ -520,9 +528,11 @@ void part7()
     std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
 
     {
-        //using Type = double; // PLEASE HELP: I'm not sure what the point of this line was
+        using numericType = decltype(it3)::Type;
+        using returnType = decltype(it3);
+        
         it3.apply( 
-            [&it = it3] (decltype(it3)::Type& value) -> Numeric<decltype(it3)::Type>&
+            [&it = it3] (numericType& value) -> returnType&
             {
                 value += 5;
                 return it;

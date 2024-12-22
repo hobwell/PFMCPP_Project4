@@ -43,7 +43,7 @@ struct Numeric
     {
         if constexpr (std::is_same<int, Type>::value)
         {
-            if constexpr (std::is_same<int, decltype(rhs)>::value)
+            if constexpr (std::is_same<int, RHS>::value)
             {
                 if (rhs == 0)
                 {
