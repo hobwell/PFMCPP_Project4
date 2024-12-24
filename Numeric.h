@@ -13,8 +13,6 @@ struct Numeric
 
     Numeric(const Numeric& other) : value (std::make_unique<Type>(*other.value)) {}
 
-    ~Numeric() {}
-
     operator T() const { return static_cast<T> (*value); }
 
     Numeric& operator+= (Type rhs)
@@ -49,13 +47,13 @@ struct Numeric
                     return *this;
                 }
             }
-            else if (static_cast<float> (rhs) < std::numeric_limits<float>::epsilon())
+            else if (static_cast<RHS> (rhs) < std::numeric_limits<RHS>::epsilon())
             {
                 std::cout << "can't divide integers by zero!" << std::endl;
                 return *this;
             }
         }
-        else if (static_cast<float> (rhs) < std::numeric_limits<float>::epsilon())
+        else if (static_cast<RHS> (rhs) < std::numeric_limits<RHS>::epsilon())
         {
             std::cout << "warning: floating point division by zero!" << std::endl;
         }
@@ -113,8 +111,6 @@ struct Numeric<double>
     Numeric (Type t) : value (std::make_unique<Type>(t)) {}
 
     Numeric(const Numeric& other) : value (std::make_unique<Type>(*other.value)) {}
-
-    ~Numeric() {}
 
     operator Type() const { return static_cast<Type> (*value); }
 

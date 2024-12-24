@@ -216,14 +216,14 @@ void part3()
 
     ft *= ft;
     ft *= ft;
-    ft /= it;    
+    ft /= static_cast<float> (it);    
     std::cout << "The result of FloatType^4 divided by IntType is: " << static_cast<float> (ft) << std::endl;
 
     dt *= 3;
     dt += it;
     std::cout << "The result of DoubleType times 3 plus IntType is : " << static_cast<double> (dt) << std::endl;
 
-    it /= pi;
+    it /= static_cast<int> (pi);
     it *= static_cast<int> (dt);
     it -= static_cast<int> (ft);
     std::cout << "The result of IntType divided by 3.14 multiplied by DoubleType minus FloatType is: " << static_cast<int> (it) << std::endl;
