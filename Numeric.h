@@ -11,8 +11,6 @@ struct Numeric
 
     Numeric (Type t) : value (std::make_unique<Type>(t)) {}
 
-    Numeric(const Numeric& other) : value (std::make_unique<Type>(*other.value)) {}
-
     operator T() const { return static_cast<T> (*value); }
 
     Numeric& operator+= (Type rhs)
@@ -109,8 +107,6 @@ struct Numeric<double>
     using Type = double;
 
     Numeric (Type t) : value (std::make_unique<Type>(t)) {}
-
-    Numeric(const Numeric& other) : value (std::make_unique<Type>(*other.value)) {}
 
     operator Type() const { return static_cast<Type> (*value); }
 
