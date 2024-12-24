@@ -51,7 +51,7 @@ struct Numeric
                 return *this;
             }
         }
-        else if (static_cast<RHS> (rhs) < std::numeric_limits<RHS>::epsilon())
+        else if (static_cast<RHS> (rhs) <= std::numeric_limits<RHS>::epsilon())
         {
             std::cout << "warning: floating point division by zero!" << std::endl;
         }
