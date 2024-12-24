@@ -15,9 +15,7 @@ struct Numeric
 
     ~Numeric() {}
 
-    operator double() const { return static_cast<double> (*value); }
-    operator float() const { return static_cast<float> (*value); }
-    operator int() const { return static_cast<int> (*value); }
+    operator T() const { return static_cast<T> (*value); }
 
     Numeric& operator+= (Type rhs)
     {
@@ -118,9 +116,7 @@ struct Numeric<double>
 
     ~Numeric() {}
 
-    operator double() const { return static_cast<double> (*value); }
-    operator float() const { return static_cast<float> (*value); }
-    operator int() const { return static_cast<int> (*value); }
+    operator Type() const { return static_cast<Type> (*value); }
 
     Numeric& operator+= (Type rhs)
     {

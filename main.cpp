@@ -224,8 +224,8 @@ void part3()
     std::cout << "The result of DoubleType times 3 plus IntType is : " << static_cast<double> (dt) << std::endl;
 
     it /= pi;
-    it *= dt;
-    it -= ft;
+    it *= static_cast<int> (dt);
+    it -= static_cast<int> (ft);
     std::cout << "The result of IntType divided by 3.14 multiplied by DoubleType minus FloatType is: " << static_cast<int> (it) << std::endl;
     
     std::cout << "An operation followed by attempts to divide by 0, which are ignored and warns user: " << std::endl;
@@ -236,11 +236,11 @@ void part3()
     it /= 0.0f;
     std::cout << static_cast<int> (it) << std::endl;
 
-    it *= ft;    
+    it *= static_cast<int> (ft);    
     std::cout << "FloatType x IntType  =  " << static_cast<int> (it) << std::endl;
 
-    it += dt;
-    it += ft;
+    it += static_cast<int> (dt);
+    it += static_cast<int> (ft);
     it *= 24;
     std::cout << "(IntType + DoubleType + FloatType) x 24 = " << static_cast<int> (it) << std::endl;
 }
@@ -323,25 +323,25 @@ void part4()
     // Power tests with FloatType
     std::cout << "Power tests with FloatType" << std::endl;
     std::cout << "pow(ft1, floatExp) = " << static_cast<float> (ft1) << "^" << static_cast<float> (floatExp) << " = " << static_cast<float> (ft1.pow(floatExp))  << std::endl;
-    std::cout << "pow(ft1, itExp) = " << static_cast<float> (ft1) << "^" << static_cast<int> (itExp) << " = " << static_cast<float> (ft1.pow(itExp))  << std::endl;
+    std::cout << "pow(ft1, itExp) = " << static_cast<float> (ft1) << "^" << static_cast<int> (itExp) << " = " << static_cast<float> (ft1.pow(static_cast<float> (itExp)))  << std::endl;
     std::cout << "pow(ft1, ftExp) = " << static_cast<float> (ft1) << "^" << static_cast<float> (ftExp) << " = " << static_cast<float> (ft1.pow(ftExp))  << std::endl;    
-    std::cout << "pow(ft1, dtExp) = " << static_cast<float> (ft1) << "^" << static_cast<double> (dtExp) << " = " << static_cast<float> (ft1.pow(dtExp))  << std::endl;    
+    std::cout << "pow(ft1, dtExp) = " << static_cast<float> (ft1) << "^" << static_cast<double> (dtExp) << " = " << static_cast<float> (ft1.pow(static_cast<float> (dtExp)))  << std::endl;    
     std::cout << "---------------------\n" << std::endl;  
 
     // Power tests with DoubleType
     std::cout << "Power tests with DoubleType" << std::endl;
     std::cout << "pow(dt1, doubleExp) = " << static_cast<double> (dt1) << "^" << static_cast<double> (doubleExp) << " = " << static_cast<double> (dt1.pow(intExp))  << std::endl;
-    std::cout << "pow(dt1, itExp) = " << static_cast<double> (dt1) << "^" << static_cast<int> (itExp) << " = " << static_cast<double> (dt1.pow(itExp))  << std::endl;
-    std::cout << "pow(dt1, ftExp) = " << static_cast<double> (dt1) << "^" << static_cast<float> (ftExp) << " = " << static_cast<double> (dt1.pow(ftExp))  << std::endl;    
+    std::cout << "pow(dt1, itExp) = " << static_cast<double> (dt1) << "^" << static_cast<int> (itExp) << " = " << static_cast<double> (dt1.pow(static_cast<double> (itExp)))  << std::endl;
+    std::cout << "pow(dt1, ftExp) = " << static_cast<double> (dt1) << "^" << static_cast<float> (ftExp) << " = " << static_cast<double> (dt1.pow(static_cast<double> (ftExp)))  << std::endl;    
     std::cout << "pow(dt1, dtExp) = " << static_cast<double> (dt1) << "^" << static_cast<double> (dtExp) << " = " << static_cast<double> (dt1.pow(dtExp))  << std::endl;    
     std::cout << "---------------------\n" << std::endl;    
 
     // Power tests with IntType
     std::cout << "Power tests with IntType" << std::endl;
     std::cout << "pow(it1, intExp) = " << static_cast<int> (it1) << "^" << static_cast<int> (intExp) << " = " << static_cast<int> (it1.pow(intExp))  << std::endl;
-    std::cout << "pow(it1, itExp) = " << static_cast<int> (it1) << "^" << static_cast<int> (itExp )<< " = " << static_cast<int> (it1.pow(itExp))  << std::endl;
-    std::cout << "pow(it1, ftExp) = " << static_cast<int> (it1) << "^" << static_cast<float> (ftExp )<< " = " << static_cast<int> (it1.pow(ftExp))  << std::endl;    
-    std::cout << "pow(it1, dtExp) = " << static_cast<int> (it1) << "^" << static_cast<double> (dtExp )<< " = " << static_cast<int> (it1.pow(dtExp))  << std::endl;    
+    std::cout << "pow(it1, itExp) = " << static_cast<int> (it1) << "^" << static_cast<int> (itExp)<< " = " << static_cast<int> (it1.pow(itExp))  << std::endl;
+    std::cout << "pow(it1, ftExp) = " << static_cast<int> (it1) << "^" << static_cast<float> (ftExp)<< " = " << static_cast<int> (it1.pow(static_cast<int> (ftExp)))  << std::endl;    
+    std::cout << "pow(it1, dtExp) = " << static_cast<int> (it1) << "^" << static_cast<double> (dtExp)<< " = " << static_cast<int> (it1.pow(static_cast<int> (dtExp)))  << std::endl;    
     std::cout << "===============================\n" << std::endl; 
 
     // ------------------------------------------------------------
@@ -597,7 +597,7 @@ int main()
     
     dt *= it;
     dt /= static_cast<double> (5.f);
-    dt += ft;
+    dt += static_cast<double> (ft);
     std::cout << "New value of dt = (dt * it) / 5.0f + ft = " << static_cast<double> (dt) << std::endl;
 
     std::cout << "---------------------\n" << std::endl; 
