@@ -225,101 +225,101 @@ private:
     float x{0}, y{0};
 };
 
-void part4()
-{
-    // ------------------------------------------------------------
-    //                          Power tests
-    // ------------------------------------------------------------
-    Numeric ft1(2.f);
-    Numeric dt1(2.0);
-    Numeric it1(2);    
-    float floatExp = 2.0f;
-    double doubleExp = 2.0;
-    int intExp = 2;
-    Numeric itExp(2);
-    Numeric ftExp(2.0f);
-    Numeric dtExp(2.0);
-    
-    // Power tests with FloatType
-    std::cout << "Power tests with FloatType" << std::endl;
-    std::cout << "pow(ft1, floatExp) = " << static_cast<float> (ft1) << "^" << static_cast<float> (floatExp) << " = " << static_cast<float> (ft1.pow(floatExp))  << std::endl;
-    std::cout << "pow(ft1, itExp) = " << static_cast<float> (ft1) << "^" << static_cast<int> (itExp) << " = " << static_cast<float> (ft1.pow(static_cast<float> (itExp)))  << std::endl;
-    std::cout << "pow(ft1, ftExp) = " << static_cast<float> (ft1) << "^" << static_cast<float> (ftExp) << " = " << static_cast<float> (ft1.pow(ftExp))  << std::endl;    
-    std::cout << "pow(ft1, dtExp) = " << static_cast<float> (ft1) << "^" << static_cast<double> (dtExp) << " = " << static_cast<float> (ft1.pow(static_cast<float> (dtExp)))  << std::endl;    
-    std::cout << "---------------------\n" << std::endl;  
+//void part4()
+//{
+//    // ------------------------------------------------------------
+//    //                          Power tests
+//    // ------------------------------------------------------------
+//    Numeric ft1(2.f);
+//    Numeric dt1(2.0);
+//    Numeric it1(2);    
+//    float floatExp = 2.0f;
+//    double doubleExp = 2.0;
+//    int intExp = 2;
+//    Numeric itExp(2);
+//    Numeric ftExp(2.0f);
+//    Numeric dtExp(2.0);
+//    
+//    // Power tests with FloatType
+//    std::cout << "Power tests with FloatType" << std::endl;
+//    std::cout << "pow(ft1, floatExp) = " << static_cast<float> (ft1) << "^" << static_cast<float> (floatExp) << " = " << static_cast<float> (ft1.pow(floatExp))  << std::endl;
+//    std::cout << "pow(ft1, itExp) = " << static_cast<float> (ft1) << "^" << static_cast<int> (itExp) << " = " << static_cast<float> (ft1.pow(static_cast<float> (itExp)))  << std::endl;
+//    std::cout << "pow(ft1, ftExp) = " << static_cast<float> (ft1) << "^" << static_cast<float> (ftExp) << " = " << static_cast<float> (ft1.pow(ftExp))  << std::endl;    
+//    std::cout << "pow(ft1, dtExp) = " << static_cast<float> (ft1) << "^" << static_cast<double> (dtExp) << " = " << static_cast<float> (ft1.pow(static_cast<float> (dtExp)))  << std::endl;    
+//    std::cout << "---------------------\n" << std::endl;  
+//
+//    // Power tests with DoubleType
+//    std::cout << "Power tests with DoubleType" << std::endl;
+//    std::cout << "pow(dt1, doubleExp) = " << static_cast<double> (dt1) << "^" << static_cast<double> (doubleExp) << " = " << static_cast<double> (dt1.pow(intExp))  << std::endl;
+//    std::cout << "pow(dt1, itExp) = " << static_cast<double> (dt1) << "^" << static_cast<int> (itExp) << " = " << static_cast<double> (dt1.pow(static_cast<double> (itExp)))  << std::endl;
+//    std::cout << "pow(dt1, ftExp) = " << static_cast<double> (dt1) << "^" << static_cast<float> (ftExp) << " = " << static_cast<double> (dt1.pow(static_cast<double> (ftExp)))  << std::endl;    
+//    std::cout << "pow(dt1, dtExp) = " << static_cast<double> (dt1) << "^" << static_cast<double> (dtExp) << " = " << static_cast<double> (dt1.pow(dtExp))  << std::endl;    
+//    std::cout << "---------------------\n" << std::endl;    
+//
+//    // Power tests with IntType
+//    std::cout << "Power tests with IntType" << std::endl;
+//    std::cout << "pow(it1, intExp) = " << static_cast<int> (it1) << "^" << static_cast<int> (intExp) << " = " << static_cast<int> (it1.pow(intExp))  << std::endl;
+//    std::cout << "pow(it1, itExp) = " << static_cast<int> (it1) << "^" << static_cast<int> (itExp)<< " = " << static_cast<int> (it1.pow(itExp))  << std::endl;
+//    std::cout << "pow(it1, ftExp) = " << static_cast<int> (it1) << "^" << static_cast<float> (ftExp)<< " = " << static_cast<int> (it1.pow(static_cast<int> (ftExp)))  << std::endl;    
+//    std::cout << "pow(it1, dtExp) = " << static_cast<int> (it1) << "^" << static_cast<double> (dtExp)<< " = " << static_cast<int> (it1.pow(static_cast<int> (dtExp)))  << std::endl;    
+//    std::cout << "===============================\n" << std::endl; 
+//
+//    // ------------------------------------------------------------
+//    //                          Point tests
+//    // ------------------------------------------------------------
+//    Numeric ft2(3.0f);
+//    Numeric dt2(4.0);
+//    Numeric it2(5);
+//    float floatMul = 6.0f;
+//
+//    // Point tests with float
+//    std::cout << "Point tests with float argument:" << std::endl;
+//    Point p0(static_cast<float> (ft2), floatMul);
+//    p0.toString();   
+//    std::cout << "Multiplication factor: " << floatMul << std::endl;
+//    p0.multiply(floatMul); 
+//    p0.toString();   
+//    std::cout << "---------------------\n" << std::endl;
+//
+//    // Point tests with FloatType
+//    std::cout << "Point tests with FloatType argument:" << std::endl;
+//    Point p1(ft2, ft2);
+//    p1.toString();   
+//    std::cout << "Multiplication factor: " << static_cast<float> (ft2) << std::endl;
+//    p1.multiply(ft2); 
+//    p1.toString();   
+//    std::cout << "---------------------\n" << std::endl;
+//
+//    // Point tests with DoubleType
+//    std::cout << "Point tests with DoubleType argument:" << std::endl;
+//    Point p2(static_cast<float>(ft2), static_cast<float>(dt2));
+//    p2.toString();   
+//    std::cout << "Multiplication factor: " << static_cast<double> (dt2) << std::endl;
+//    p2.multiply(dt2); 
+//    p2.toString();   
+//    std::cout << "---------------------\n" << std::endl;
+//
+//    // Point tests with IntType
+//    std::cout << "Point tests with IntType argument:" << std::endl;
+//    Point p3(static_cast<float>(ft2), static_cast<float>(dt2));
+//    p3.toString();   
+//    std::cout << "Multiplication factor: " << static_cast<int> (it2) << std::endl;
+//    p3.multiply(it2); 
+//    p3.toString();   
+//    std::cout << "---------------------\n" << std::endl;
+//}
 
-    // Power tests with DoubleType
-    std::cout << "Power tests with DoubleType" << std::endl;
-    std::cout << "pow(dt1, doubleExp) = " << static_cast<double> (dt1) << "^" << static_cast<double> (doubleExp) << " = " << static_cast<double> (dt1.pow(intExp))  << std::endl;
-    std::cout << "pow(dt1, itExp) = " << static_cast<double> (dt1) << "^" << static_cast<int> (itExp) << " = " << static_cast<double> (dt1.pow(static_cast<double> (itExp)))  << std::endl;
-    std::cout << "pow(dt1, ftExp) = " << static_cast<double> (dt1) << "^" << static_cast<float> (ftExp) << " = " << static_cast<double> (dt1.pow(static_cast<double> (ftExp)))  << std::endl;    
-    std::cout << "pow(dt1, dtExp) = " << static_cast<double> (dt1) << "^" << static_cast<double> (dtExp) << " = " << static_cast<double> (dt1.pow(dtExp))  << std::endl;    
-    std::cout << "---------------------\n" << std::endl;    
-
-    // Power tests with IntType
-    std::cout << "Power tests with IntType" << std::endl;
-    std::cout << "pow(it1, intExp) = " << static_cast<int> (it1) << "^" << static_cast<int> (intExp) << " = " << static_cast<int> (it1.pow(intExp))  << std::endl;
-    std::cout << "pow(it1, itExp) = " << static_cast<int> (it1) << "^" << static_cast<int> (itExp)<< " = " << static_cast<int> (it1.pow(itExp))  << std::endl;
-    std::cout << "pow(it1, ftExp) = " << static_cast<int> (it1) << "^" << static_cast<float> (ftExp)<< " = " << static_cast<int> (it1.pow(static_cast<int> (ftExp)))  << std::endl;    
-    std::cout << "pow(it1, dtExp) = " << static_cast<int> (it1) << "^" << static_cast<double> (dtExp)<< " = " << static_cast<int> (it1.pow(static_cast<int> (dtExp)))  << std::endl;    
-    std::cout << "===============================\n" << std::endl; 
-
-    // ------------------------------------------------------------
-    //                          Point tests
-    // ------------------------------------------------------------
-    Numeric ft2(3.0f);
-    Numeric dt2(4.0);
-    Numeric it2(5);
-    float floatMul = 6.0f;
-
-    // Point tests with float
-    std::cout << "Point tests with float argument:" << std::endl;
-    Point p0(static_cast<float> (ft2), floatMul);
-    p0.toString();   
-    std::cout << "Multiplication factor: " << floatMul << std::endl;
-    p0.multiply(floatMul); 
-    p0.toString();   
-    std::cout << "---------------------\n" << std::endl;
-
-    // Point tests with FloatType
-    std::cout << "Point tests with FloatType argument:" << std::endl;
-    Point p1(ft2, ft2);
-    p1.toString();   
-    std::cout << "Multiplication factor: " << static_cast<float> (ft2) << std::endl;
-    p1.multiply(ft2); 
-    p1.toString();   
-    std::cout << "---------------------\n" << std::endl;
-
-    // Point tests with DoubleType
-    std::cout << "Point tests with DoubleType argument:" << std::endl;
-    Point p2(static_cast<float>(ft2), static_cast<float>(dt2));
-    p2.toString();   
-    std::cout << "Multiplication factor: " << static_cast<double> (dt2) << std::endl;
-    p2.multiply(dt2); 
-    p2.toString();   
-    std::cout << "---------------------\n" << std::endl;
-
-    // Point tests with IntType
-    std::cout << "Point tests with IntType argument:" << std::endl;
-    Point p3(static_cast<float>(ft2), static_cast<float>(dt2));
-    p3.toString();   
-    std::cout << "Multiplication factor: " << static_cast<int> (it2) << std::endl;
-    p3.multiply(it2); 
-    p3.toString();   
-    std::cout << "---------------------\n" << std::endl;
-}
+//template <typename T>
+//void myNumericFreeFunct(std::unique_ptr<T>& t)
+//{
+//    t += 7;
+//}
 
 template <typename T>
-void myNumericFreeFunct(T& t)
+void cube(std::unique_ptr<T>& t)
 {
-    t += 7;
-}
-
-template <typename T>
-void cube(T& t)
-{
-    t *= t;
-    t *= t;
+    auto& v = *t;
+    v = v * v * v;
 }
 
 /*
@@ -482,18 +482,18 @@ int main()
     Numeric<double> d(4.2);
     
     f += 2.f;
-    f -= i;
-    f *= d;
+    f -= static_cast<float> (i);
+    f *= static_cast<float> (d);
     f /= 2.f;
     std::cout << "f: " << f << std::endl;
     
-    d += 2.f;
+    d += static_cast<double> (2.f);
     d -= i;
-    d *= f;
+    d *= static_cast<double> (f);
     d /= 2.f;
     std::cout << "d: " << d << std::endl;
     
-    i += 2.f; i -= f; i *= d; i /= 2.f;
+    i += 2.f; i -= static_cast<int> (f); i *= static_cast<int> (d); i /= 2.f;
     std::cout << "i: "<< i << std::endl;
     
     Point p(f, i);
@@ -502,7 +502,7 @@ int main()
     d *= -1;
     std::cout << "d: " << d << std::endl;
     
-    p.multiply(d.pow(f).pow(i));
+    p.multiply(d.pow(static_cast<double> (f)).pow(i));
     std::cout << "d: " << d << std::endl;
     
     p.toString();

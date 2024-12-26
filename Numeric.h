@@ -9,35 +9,59 @@ template <typename T>
 struct Numeric
 {
     using Type = Temporary<T>;
-
-    Numeric (T&& t) : value (std::make_unique<Temporary<T>>(std::move (t))) {}
-
-    operator T() const { return *value; }
-
-    template <typename OtherType>
-    Numeric& operator+= (OtherType&& rhs)
+  
+    Numeric& operator= (T&& rhs)
     {
-        *value += static_cast<T> (rhs);
+        *value = std::move(rhs);
         return *this;
     }
 
-    template <typename OtherType>
-    Numeric& operator-= (OtherType&& rhs)
+    Numeric (Type t) : value (std::make_unique<Temporary<T>>(std::move (t))) {}
+
+    operator T() const { return static_cast<T> (*value); }
+
+    Numeric& operator+= (T rhs)
     {
-        *value -= static_cast<T> (rhs);
+        *value += rhs;
         return *this;
     }
 
-    template <typename OtherType>
-    Numeric& operator*= (OtherType&& rhs)
+    Numeric& operator-= (T rhs)
     {
-        *value *= static_cast<T> (rhs);
+        *value -= rhs;
         return *this;
     }
 
-    template <typename OtherType>
-    Numeric& operator/= (OtherType&& rhs)
+    Numeric& operator*= (T rhs)
     {
+        *value *= rhs;
+        return *this;
+    }
+
+    template <typename RHS>
+    Numeric& operator/= (RHS rhs)
+    {
+        if constexpr (std::is_same<int, T>::value)
+        {
+            if constexpr (std::is_same<int, RHS>::value)
+            {
+                if (rhs == 0)
+                {
+                    std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
+                    return *this;
+                }
+            }
+            else if (static_cast<RHS> (rhs) < std::numeric_limits<RHS>::epsilon())
+            {
+                std::cout << "can't divide integers by zero!" << std::endl;
+                return *this;
+            }
+        }
+        else if (static_cast<RHS> (rhs) <= std::numeric_limits<RHS>::epsilon())
+        {
+            std::cout << "warning: floating point division by zero!" << std::endl;
+        }
+    
         *value /= static_cast<T> (rhs);
         return *this;
     }
@@ -45,14 +69,13 @@ struct Numeric
     template <typename CallableType>
     Numeric& apply (CallableType&& callable)
     {
-        callable(*value);
+        callable(value);
         return *this;
     }
 
-    template <typename OtherType>
-    Numeric& pow (OtherType&& exponent)
+    Numeric& pow (T exponent)
     {
-       *value = static_cast<T> (std::pow (static_cast<T> (*value), static_cast<T> (exponent)));
+       *value = static_cast<T> (std::pow (*value, exponent));
         
         return *this;
     }
