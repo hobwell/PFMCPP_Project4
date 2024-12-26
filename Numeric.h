@@ -8,37 +8,37 @@
 template <typename T>
 struct Numeric
 {
-    using Type = T;
+    using Type = Temporary<T>;
 
-    Numeric (Type&& t) : value (std::make_unique<Temporary<Type>>(std::move (t))) {}
+    Numeric (T&& t) : value (std::make_unique<Temporary<T>>(std::move (t))) {}
 
     operator T() const { return *value; }
 
     template <typename OtherType>
     Numeric& operator+= (OtherType&& rhs)
     {
-        *value += static_cast<Type> (rhs);
+        *value += static_cast<T> (rhs);
         return *this;
     }
 
     template <typename OtherType>
     Numeric& operator-= (OtherType&& rhs)
     {
-        *value -= static_cast<Type> (rhs);
+        *value -= static_cast<T> (rhs);
         return *this;
     }
 
     template <typename OtherType>
     Numeric& operator*= (OtherType&& rhs)
     {
-        *value *= static_cast<Type> (rhs);
+        *value *= static_cast<T> (rhs);
         return *this;
     }
 
     template <typename OtherType>
     Numeric& operator/= (OtherType&& rhs)
     {
-        *value /= static_cast<Type> (rhs);
+        *value /= static_cast<T> (rhs);
         return *this;
     }
 
@@ -52,13 +52,13 @@ struct Numeric
     template <typename OtherType>
     Numeric& pow (OtherType&& exponent)
     {
-       *value = static_cast<Type> (std::pow (static_cast<Type> (*value), static_cast<Type> (exponent)));
+       *value = static_cast<T> (std::pow (static_cast<T> (*value), static_cast<T> (exponent)));
         
         return *this;
     }
 
 private:
-    std::unique_ptr<Temporary<Type>> value;
+    std::unique_ptr<Temporary<T>> value;
 };
 
 // Deduction guide
