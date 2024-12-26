@@ -22,51 +22,53 @@ Create a branch named Part8
   
  1) Here is a starting point for how to implement your Temporary struct.
  */
-
 #include <typeinfo>
-template<typename NumericType>
-struct Temporary
-{
-    Temporary(NumericType t) : v(t)
-    {
-        std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
-                  << counter++ << std::endl;
-    }
-    /*
-     revise these conversion functions to read/write to 'v' here
-     hint: what qualifier do read-only functions usually have?
-     */
-    operator ___() { /* read-only function */ }
-    operator ___() { /* read/write function */ }
-private:
-    static int counter;
-    NumericType v;
-};
+#include <iostream>
+#include "Numeric.h"
+// template<typename NumericType>
+// struct Temporary
+// {
+//     Temporary(NumericType t) : v(t)
+//     {
+//         std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
+//                   << counter++ << std::endl;
+//     }
+//     /*
+//      revise these conversion functions to read/write to 'v' here
+//      hint: what qualifier do read-only functions usually have?
+//      */
+//     operator ___() { /* read-only function */ }
+//     operator ___() { /* read/write function */ }
+// private:
+//     static int counter;
+//     NumericType v;
+// };
 
 /*
  2) add the definition of Temporary::counter here, which is a static variable and must be defined outside of the class.
     Remember the rules about how to define a Template member variable/function outside of the class.
 */
-
+template <typename NumericType>
+int Temporary<NumericType>::counter = 0;
 /*
  3) You'll need to template your overloaded math operator functions in your Templated Class from Ch5 p04
     use static_cast to convert whatever type is passed in to your template's NumericType before performing the +=, -=, etc.  here's an example implementation:
  */
-namespace example
-{
-template<typename NumericType>
-struct Numeric
-{
-    //snip
-    template<typename OtherType>
-    Numeric& operator-=(const OtherType& o) 
-    { 
-        *value -= static_cast<NumericType>(o); 
-        return *this; 
-    }
-    //snip
-};
-}
+//namespace example
+//{
+//template<typename NumericType>
+//struct Numeric
+//{
+//    //snip
+//    template<typename OtherType>
+//    Numeric& operator-=(const OtherType& o) 
+//    { 
+//        *value -= static_cast<NumericType>(o); 
+//        return *this; 
+//    }
+//    //snip
+//};
+//}
 
 /*
  4) remove your specialized <double> template of your Numeric<T> class from the previous task (ch5 p04)
@@ -126,43 +128,43 @@ i cubed: 531441
 Use a service like https://www.diffchecker.com/diff to compare your output. 
 */
 
-void part3()
-{
-    Numeric ft( 5.5f );
-    Numeric dt( 11.1 );
-    Numeric it ( 34 );
-    Numeric pi( 3.14 );
-
-    ft *= ft;
-    ft *= ft;
-    ft /= static_cast<float> (it);    
-    std::cout << "The result of FloatType^4 divided by IntType is: " << static_cast<float> (ft) << std::endl;
-
-    dt *= 3;
-    dt += it;
-    std::cout << "The result of DoubleType times 3 plus IntType is : " << static_cast<double> (dt) << std::endl;
-
-    it /= static_cast<int> (pi);
-    it *= static_cast<int> (dt);
-    it -= static_cast<int> (ft);
-    std::cout << "The result of IntType divided by 3.14 multiplied by DoubleType minus FloatType is: " << static_cast<int> (it) << std::endl;
-    
-    std::cout << "An operation followed by attempts to divide by 0, which are ignored and warns user: " << std::endl;
-
-    it *= it;
-    it /= 0;
-    it /= 0.f;
-    it /= 0.0f;
-    std::cout << static_cast<int> (it) << std::endl;
-
-    it *= static_cast<int> (ft);    
-    std::cout << "FloatType x IntType  =  " << static_cast<int> (it) << std::endl;
-
-    it += static_cast<int> (dt);
-    it += static_cast<int> (ft);
-    it *= 24;
-    std::cout << "(IntType + DoubleType + FloatType) x 24 = " << static_cast<int> (it) << std::endl;
-}
+//void part3()
+//{
+//    Numeric ft( 5.5f );
+//    Numeric dt( 11.1 );
+//    Numeric it ( 34 );
+//    Numeric pi( 3.14 );
+//
+//    ft *= ft;
+//    ft *= ft;
+//    ft /= static_cast<float> (it);    
+//    std::cout << "The result of FloatType^4 divided by IntType is: " << static_cast<float> (ft) << std::endl;
+//
+//    dt *= 3;
+//    dt += it;
+//    std::cout << "The result of DoubleType times 3 plus IntType is : " << static_cast<double> (dt) << std::endl;
+//
+//    it /= static_cast<int> (pi);
+//    it *= static_cast<int> (dt);
+//    it -= static_cast<int> (ft);
+//    std::cout << "The result of IntType divided by 3.14 multiplied by DoubleType minus FloatType is: " << static_cast<int> (it) << std::endl;
+//    
+//    std::cout << "An operation followed by attempts to divide by 0, which are ignored and warns user: " << std::endl;
+//
+//    it *= it;
+//    it /= 0;
+//    it /= 0.f;
+//    it /= 0.0f;
+//    std::cout << static_cast<int> (it) << std::endl;
+//
+//    it *= static_cast<int> (ft);    
+//    std::cout << "FloatType x IntType  =  " << static_cast<int> (it) << std::endl;
+//
+//    it += static_cast<int> (dt);
+//    it += static_cast<int> (ft);
+//    it *= 24;
+//    std::cout << "(IntType + DoubleType + FloatType) x 24 = " << static_cast<int> (it) << std::endl;
+//}
 
 
 
@@ -183,9 +185,8 @@ struct Point
 {
     Point (float x_, float y_) : x (x_), y (y_) { }
 
-    Point (const Numeric<double>& x_, const Numeric<double>& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
-    Point (const Numeric<float>& x_, const Numeric<float>& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
-    Point (const Numeric<int>& x_, const Numeric<int>& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
+    template <typename T1, typename T2>
+    Point (const Numeric<T1>& x_, const Numeric<T2>& y_) : Point (static_cast<float> (x_), static_cast<float> (y_)) {}
 
     Point& multiply (const float m)
     {
@@ -314,6 +315,13 @@ void myNumericFreeFunct(T& t)
     t += 7;
 }
 
+template <typename T>
+void cube(T& t)
+{
+    t *= t;
+    t *= t;
+}
+
 /*
 void part6()
 {
@@ -371,103 +379,102 @@ void part6()
 }
 */
 
-void part7()
-{
-    
-    // steps 8 - 10
-    Numeric<double> step8(23.0); // step 8
+//void part7()
+//{
+//    
+//    // steps 8 - 10
+//    Numeric<double> step8(23.0); // step 8
+//
+//    {        
+//        using numericType = decltype(step8)::Type;
+//        using returnType = decltype(step8);
+//            
+//        // Note: I couldn't figure out how to do this without creating an lvalue
+//        auto necessaryLValue = [&dt = step8] (numericType& value) -> returnType&
+//        {
+//            value += 5.0;
+//            // step 10
+//            dt += 14.0;
+//            return dt;
+//        };
+//    
+//        step8.apply(necessaryLValue).apply(myNumericFreeFunct<double>); // step 9
+//    }
+//    
+//    Numeric ft3(3.0f);
+//    Numeric dt3(4.0);
+//    Numeric it3(5);
+//    
+//    std::cout << "Calling Numeric<float>::apply() using a lambda (adds 7.0f) and Numeric<float> as return type:" << std::endl;
+//    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
+//
+//    {
+//        using numericType = decltype(ft3)::Type;
+//        using returnType = decltype(ft3);
+//        
+//        ft3.apply( 
+//            [&ft = ft3] (numericType& value) -> returnType&
+//            {
+//                value += 7.0f;
+//                return ft;
+//            }
+//        );
+//    }
+//
+//    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
+//    std::cout << "Calling Numeric<float>::apply() twice using a free function (adds 7.0f) and void as return type:" << std::endl;
+//    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
+//    ft3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
+//    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
+//    std::cout << "---------------------\n" << std::endl;
+//
+//    std::cout << "Calling Numeric<double>::apply() using a lambda (adds 6.0) and Numeric<double> as return type:" << std::endl;
+//    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
+//
+//    {
+//        using numericType = decltype(dt3)::Type;
+//        using returnType = decltype(dt3);
+//        // NOTE: I couldn't figure out how to do this without creating an lvalue
+//        auto neededLValue = 
+//            [&dt = dt3] (numericType& value) -> returnType&
+//            { 
+//                value += 6.0;
+//                return dt;
+//            };
+//        dt3.apply(neededLValue); // This calls the templated apply fcn
+//    }
+//    
+//    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
+//    std::cout << "Calling Numeric<double>::apply() twice using a free function (adds 7.0) and void as return type:" << std::endl;
+//    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
+//    dt3.apply(myNumericFreeFunct<double>).apply(myNumericFreeFunct<double>); // This calls the templated apply fcn
+//    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
+//    std::cout << "---------------------\n" << std::endl;
+//
+//    std::cout << "Calling Numeric<int>::apply() using a lambda (adds 5) and Numeric<int> as return type:" << std::endl;
+//    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
+//
+//    {
+//        using numericType = decltype(it3)::Type;
+//        using returnType = decltype(it3);
+//        
+//        it3.apply( 
+//            [&it = it3] (numericType& value) -> returnType&
+//            {
+//                value += 5;
+//                return it;
+//            }   
+//        );
+//    }
+//    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
+//    std::cout << "Calling Numeric<int>::apply() twice using a free function (adds 7) and void as return type:" << std::endl;
+//    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
+//    it3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
+//    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
+//    std::cout << "---------------------\n" << std::endl;    
+//}
 
-    {        
-        using numericType = decltype(step8)::Type;
-        using returnType = decltype(step8);
-            
-        // Note: I couldn't figure out how to do this without creating an lvalue
-        auto necessaryLValue = [&dt = step8] (numericType& value) -> returnType&
-        {
-            value += 5.0;
-            // step 10
-            dt += 14.0;
-            return dt;
-        };
-    
-        step8.apply(necessaryLValue).apply(myNumericFreeFunct<double>); // step 9
-    }
-    
-    Numeric ft3(3.0f);
-    Numeric dt3(4.0);
-    Numeric it3(5);
-    
-    std::cout << "Calling Numeric<float>::apply() using a lambda (adds 7.0f) and Numeric<float> as return type:" << std::endl;
-    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
 
-    {
-        using numericType = decltype(ft3)::Type;
-        using returnType = decltype(ft3);
-        
-        ft3.apply( 
-            [&ft = ft3] (numericType& value) -> returnType&
-            {
-                value += 7.0f;
-                return ft;
-            }
-        );
-    }
-
-    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
-    std::cout << "Calling Numeric<float>::apply() twice using a free function (adds 7.0f) and void as return type:" << std::endl;
-    std::cout << "ft3 before: " << static_cast<float> (ft3) << std::endl;
-    ft3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
-    std::cout << "ft3 after: " << static_cast<float> (ft3) << std::endl;
-    std::cout << "---------------------\n" << std::endl;
-
-    std::cout << "Calling Numeric<double>::apply() using a lambda (adds 6.0) and Numeric<double> as return type:" << std::endl;
-    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
-
-    {
-        using numericType = decltype(dt3)::Type;
-        using returnType = decltype(dt3);
-        // NOTE: I couldn't figure out how to do this without creating an lvalue
-        auto neededLValue = 
-            [&dt = dt3] (numericType& value) -> returnType&
-            { 
-                value += 6.0;
-                return dt;
-            };
-        dt3.apply(neededLValue); // This calls the templated apply fcn
-    }
-    
-    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
-    std::cout << "Calling Numeric<double>::apply() twice using a free function (adds 7.0) and void as return type:" << std::endl;
-    std::cout << "dt3 before: " << static_cast<double> (dt3) << std::endl;
-    dt3.apply(myNumericFreeFunct<double>).apply(myNumericFreeFunct<double>); // This calls the templated apply fcn
-    std::cout << "dt3 after: " << static_cast<double> (dt3) << std::endl;
-    std::cout << "---------------------\n" << std::endl;
-
-    std::cout << "Calling Numeric<int>::apply() using a lambda (adds 5) and Numeric<int> as return type:" << std::endl;
-    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
-
-    {
-        using numericType = decltype(it3)::Type;
-        using returnType = decltype(it3);
-        
-        it3.apply( 
-            [&it = it3] (numericType& value) -> returnType&
-            {
-                value += 5;
-                return it;
-            }   
-        );
-    }
-    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
-    std::cout << "Calling Numeric<int>::apply() twice using a free function (adds 7) and void as return type:" << std::endl;
-    std::cout << "it3 before: " << static_cast<int> (it3) << std::endl;
-    it3.apply(myNumericFreeFunct).apply(myNumericFreeFunct);
-    std::cout << "it3 after: " << static_cast<int> (it3) << std::endl;
-    std::cout << "---------------------\n" << std::endl;    
-}
-
-
-#include <iostream>
 int main()
 {
     Numeric<float> f(0.1f);
@@ -503,7 +510,7 @@ int main()
     Numeric<float> floatNum(4.3f);
     Numeric<int> intNum(2);
     Numeric<int> intNum2(6);
-    intNum = 2 + (intNum2 - 4) + static_cast<double>(floatNum) / 2.3;
+    intNum = 2 + (intNum2 - 4) + static_cast<int> (static_cast<double> (floatNum) / 2.3);
     std::cout << "intNum: " << intNum << std::endl;
     
     {
