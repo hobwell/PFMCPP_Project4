@@ -24,7 +24,10 @@ Create a branch named Part8
  */
 #include <typeinfo>
 #include <iostream>
-#include "Numeric.h"
+#include <memory>
+#include <limits>
+#include <math.h>
+
 template<typename NumericType>
 struct Temporary
 {
@@ -37,8 +40,8 @@ struct Temporary
      revise these conversion functions to read/write to 'v' here
      hint: what qualifier do read-only functions usually have?
      */
-    operator NumericType() const { return v; }
-    operator NumericType() { return v; }
+    operator NumericType() const { return v; } 
+    operator NumericType&() { return v; }  //now this one
 private:
     static int counter;
     NumericType v;
@@ -127,6 +130,140 @@ i cubed: 531441
 
 Use a service like https://www.diffchecker.com/diff to compare your output. 
 */
+
+template <typename T>
+struct Numeric
+{
+    using Type = Temporary<T>;
+
+    Numeric& operator= (const T& rhs)
+    {
+        *value = rhs;
+        return *this;
+    }
+
+    Numeric (Type t) : value (std::make_unique<Type>(std::move (t))) {}
+//that confuses me
+// Type is Numeric<T> how is that cast to T?
+//ahhh - got it, the conversion operator in Temporary is kicking in here //yep. 2 levels of conversion. 
+// this is so hard to think about.  Particularly since I can't debug to see what is going on.  my wrong assumptions are killing me here.
+
+//static cast returns Temporary<T>.  then this function itself returns T(), so the Temprorary::operator Numeric() is invoked to convert that Temporary<T> into a T
+//type is Type = Temporary<T>; 
+
+//Copy this project into cppinsights.io and run it.  You'll see all of the behind-the-scene conversions. 
+
+    // operator T() const { return static_cast<Type>(*value); } //wrong: this casts to Numeric<T>
+
+    //this is the read-only conversion function
+    operator T() const { return *value; } // invoke Temporary<T>s conversion function
+    // operator T&() { return static_cast<Type>(*value); } //wrong: this casts to Numeric<T> (which doesn't make sense)
+    // this is the read-write conversion function
+    operator T&() { return *value; } // invoke Temporary<T>s conversion function
+    //error: cannot convert 'const Numeric<double>' to 'float' without a conversion operator
+
+/*
+ 6) Finally, your conversion function in your templated class is going to be returning this Temporary, 
+        so you should probably NOT return by copy if you want your templated class's owned object to be modified by any math operation.
+    See the previous hint for implementing the conversion functions for the Temporary if you want to get the held value
+*/
+
+
+//3) You'll need to template your overloaded math operator functions in your Templated Class from Ch5 p04
+//    use static_cast to convert whatever type is passed in to your template's NumericType before performing the +=, -=, etc.  here's an example implementation:
+//namespace example
+//{
+//template<typename NumericType>
+//struct Numeric
+//{
+//    //snip
+//    template<typename OtherType>
+//    Numeric& operator-=(const OtherType& o) 
+//    { 
+//        *value -= static_cast<NumericType>(o); 
+//        return *this; 
+//    }
+//    //snip
+//};
+//}
+    template <typename OtherType>
+    Numeric& operator+= (const OtherType& rhs) //understood
+    {
+        // std::cout << *value << " += " << rhs;
+        *value += static_cast<T> (rhs); // this will rely on the conversion operator of Temporary
+        // std::cout << " = " << *value << std::endl;
+        return *this;
+    }
+
+    template <typename OtherType>
+    Numeric& operator-= (const OtherType& rhs)
+    {
+        // std::cout << *value << " -= " << rhs;
+        *value -= static_cast<T> (rhs);
+        // std::cout << " = " << *value << std::endl;
+        return *this;
+    }
+
+    template <typename OtherType>
+    Numeric& operator*= (const OtherType& rhs)
+    {
+        // std::cout << *value << " *= " << rhs;
+        *value *= static_cast<T> (rhs);
+        // std::cout << " = " << *value << std::endl;
+        return *this;
+    }
+
+    template <typename OtherType>
+    Numeric& operator/= (const OtherType& rhs)
+    {
+        // std::cout << *value << " /= " << rhs;
+        if constexpr (std::is_same<int, T>::value)
+        {
+            if constexpr (std::is_same<int, OtherType>::value)
+            {
+                if (rhs == 0)
+                {
+                    std::cout << "error: integer division by zero is an error and will crash the program!" << std::endl;
+                    return *this;
+                }
+            }
+            else if (static_cast<OtherType> (rhs) < std::numeric_limits<OtherType>::epsilon())
+            {
+                std::cout << "can't divide integers by zero!" << std::endl;
+                return *this;
+            }
+        }
+        else if (static_cast<OtherType> (rhs) <= std::numeric_limits<OtherType>::epsilon())
+        {
+            std::cout << "warning: floating point division by zero!" << std::endl;
+        }
+        // else
+        {
+            *value /= static_cast<T> (rhs);
+        }
+        // std::cout << " = " << *value << std::endl;
+        return *this;
+    }
+
+    template <typename CallableType>
+    Numeric& apply (CallableType&& callable)
+    {
+        callable(value);
+        return *this;
+    }
+
+    template <typename OtherType>
+    Numeric& pow (const OtherType& exponent)
+    {
+        // std::cout << *value << " ^ " << exponent;
+        *value = std::pow (static_cast<T> (*value), static_cast<T> (exponent));
+        // std::cout << " = " << *value << std::endl;
+        return *this;
+    }
+
+private:
+    std::unique_ptr<Type> value;
+};
 
 //void part3()
 //{
@@ -474,45 +611,44 @@ void part6()
 //    std::cout << "---------------------\n" << std::endl;    
 //}
 
-
 int main()
 {
     Numeric<float> f(0.1f);
     Numeric<int> i(3);
     Numeric<double> d(4.2);
-    
+
     f += 2.f;
-    f -= static_cast<float> (i);
-    f *= static_cast<float> (d);
+    f -= i;
+    f *= d;
     f /= 2.f;
     std::cout << "f: " << f << std::endl;
-    
-    d += static_cast<double> (2.f);
+
+    d += 2.f;
     d -= i;
-    d *= static_cast<double> (f);
+    d *= f;
     d /= 2.f;
     std::cout << "d: " << d << std::endl;
-    
-    i += 2.f; i -= static_cast<int> (f); i *= static_cast<int> (d); i /= 2.f;
+
+    i += 2.f; i -= f; i *= d; i /= 2.f;
     std::cout << "i: "<< i << std::endl;
-    
+
     Point p(f, i);
     p.toString();
-    
+
     d *= -1;
     std::cout << "d: " << d << std::endl;
-    
-    p.multiply(d.pow(static_cast<double> (f)).pow(i));
+
+    p.multiply(d.pow(f).pow(i));
     std::cout << "d: " << d << std::endl;
-    
+
     p.toString();
-    
+
     Numeric<float> floatNum(4.3f);
     Numeric<int> intNum(2);
     Numeric<int> intNum2(6);
-    intNum = 2 + (intNum2 - 4) + static_cast<int> (static_cast<double> (floatNum) / 2.3);
+    intNum = 2 + (intNum2 - 4) + static_cast<int> (static_cast<double>(floatNum) / 2.3);
     std::cout << "intNum: " << intNum << std::endl;
-    
+
     {
         using Type = decltype(f)::Type;
         f.apply([&f](std::unique_ptr<Type>&value) -> decltype(f)&
@@ -522,11 +658,11 @@ int main()
                     return f;
                 });
         std::cout << "f squared: " << f << std::endl;
-        
+
         f.apply( cube<Type> );
         std::cout << "f cubed: " << f << std::endl;
     }
-    
+
     {
         using Type = decltype(d)::Type;
         d.apply([&d](std::unique_ptr<Type>&value) -> decltype(d)&
@@ -536,11 +672,11 @@ int main()
                     return d;
                 });
         std::cout << "d squared: " << d << std::endl;
-        
+
         d.apply( cube<Type> );
         std::cout << "d cubed: " << d << std::endl;
     }
-    
+
     {
         using Type = decltype(i)::Type;
         i.apply([&i](std::unique_ptr<Type>&value) -> decltype(i)&
@@ -550,12 +686,11 @@ int main()
                     return i;
                 });
         std::cout << "i squared: " << i << std::endl;
-        
+
         i.apply( cube<Type> );
         std::cout << "i cubed: " << i << std::endl;
     }
 }
-
 
 /*
  MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
