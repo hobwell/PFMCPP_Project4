@@ -80,14 +80,30 @@ struct Temporary
                   << counter++ << std::endl;
     }
 
+    // rule of 5: define destructor 
+    ~Temporary() = default; // nothing in this class requires management
+
+    // rule of 5: define move constructor
+    Temporary(Temporary&& other) : v(other.v) { }
+
     operator NumericType() const 
     { 
         return v;
     }
+
     operator NumericType&() 
     {
        return v;
     }
+
+    // rule of 5: define move assignment operator
+    Temporary& operator= (Temporary&& other)
+    {
+        v = std::move(other.v);
+        return *this;
+    }
+
+    
 private:
     static int counter;
     NumericType v;
@@ -104,6 +120,24 @@ struct Numeric
 {
     using Type = Temporary<T>;
 
+    // rule of 5: define destructor 
+    ~Numeric() = default; // std::unique_ptr<Type> does not require management
+
+    // rule of 5: define move constructor
+    Numeric (Numeric&& other) : value(std::move(other.value)) 
+    {
+        other.value = nullptr;
+    }
+
+    // rule of 5: define move assignment operator
+    Numeric& operator= (Numeric&& other)
+    {
+        value = std::move(other.value);
+        other.value = nullptr;
+        return *this;
+    }
+
+    // added to suppress an error when assigning a const T to a Numeric<T>
     Numeric& operator= (const T& rhs)
     {
         *value = rhs;
@@ -118,61 +152,30 @@ struct Numeric
     // this is the read-write conversion function
     operator T&() { return *value; } // invoke Temporary<T>s conversion function
 
-/*
- 6) Finally, your conversion function in your templated class is going to be returning this Temporary, 
-        so you should probably NOT return by copy if you want your templated class's owned object to be modified by any math operation.
-    See the previous hint for implementing the conversion functions for the Temporary if you want to get the held value
-*/
-
-
-//3) You'll need to template your overloaded math operator functions in your Templated Class from Ch5 p04
-//    use static_cast to convert whatever type is passed in to your template's NumericType before performing the +=, -=, etc.  here's an example implementation:
-//namespace example
-//{
-//template<typename NumericType>
-//struct Numeric
-//{
-//    //snip
-//    template<typename OtherType>
-//    Numeric& operator-=(const OtherType& o) 
-//    { 
-//        *value -= static_cast<NumericType>(o); 
-//        return *this; 
-//    }
-//    //snip
-//};
-//}
     template <typename OtherType>
-    Numeric& operator+= (const OtherType& rhs) //understood
+    Numeric& operator+= (const OtherType& rhs)
     {
-        // std::cout << *value << " += " << rhs;
         *value += static_cast<T> (rhs); // this will rely on the conversion operator of Temporary
-        // std::cout << " = " << *value << std::endl;
         return *this;
     }
 
     template <typename OtherType>
     Numeric& operator-= (const OtherType& rhs)
     {
-        // std::cout << *value << " -= " << rhs;
         *value -= static_cast<T> (rhs);
-        // std::cout << " = " << *value << std::endl;
         return *this;
     }
 
     template <typename OtherType>
     Numeric& operator*= (const OtherType& rhs)
     {
-        // std::cout << *value << " *= " << rhs;
         *value *= static_cast<T> (rhs);
-        // std::cout << " = " << *value << std::endl;
         return *this;
     }
 
     template <typename OtherType>
     Numeric& operator/= (const OtherType& rhs)
     {
-        // std::cout << *value << " /= " << rhs;
         if constexpr (std::is_same<int, T>::value)
         {
             if constexpr (std::is_same<int, OtherType>::value)
@@ -193,11 +196,9 @@ struct Numeric
         {
             std::cout << "warning: floating point division by zero!" << std::endl;
         }
-        // else
         {
             *value /= static_cast<T> (rhs);
         }
-        // std::cout << " = " << *value << std::endl;
         return *this;
     }
 
@@ -211,9 +212,7 @@ struct Numeric
     template <typename OtherType>
     Numeric& pow (const OtherType& exponent)
     {
-        // std::cout << *value << " ^ " << exponent;
         *value = std::pow (static_cast<T> (*value), static_cast<T> (exponent));
-        // std::cout << " = " << *value << std::endl;
         return *this;
     }
 
@@ -222,6 +221,9 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
 };
+
+template <typename T>
+Numeric(T) -> Numeric<T>;
 
 //void part3()
 //{
