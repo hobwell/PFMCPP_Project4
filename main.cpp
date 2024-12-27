@@ -74,9 +74,9 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 template<typename NumericType>
 struct Temporary
 {
-    Temporary(NumericType t) : v(t)
+    Temporary (NumericType t) : v (t)
     {
-        std::cout << "I'm a Temporary<" << typeid(v).name() << "> object, #"
+        std::cout << "I'm a Temporary<" << typeid (v).name() << "> object, #"
                   << counter++ << std::endl;
     }
 
@@ -84,7 +84,7 @@ struct Temporary
     ~Temporary() = default; // nothing in this class requires management
 
     // rule of 5: define move constructor
-    Temporary(Temporary&& other) : v(other.v) { }
+    Temporary (Temporary&& other) : v (other.v) { }
 
     operator NumericType() const 
     { 
@@ -99,7 +99,7 @@ struct Temporary
     // rule of 5: define move assignment operator
     Temporary& operator= (Temporary&& other)
     {
-        v = std::move(other.v);
+        v = std::move (other.v);
         return *this;
     }
 
@@ -108,7 +108,7 @@ private:
     static int counter;
     NumericType v;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Temporary)
 };
 
 
@@ -124,7 +124,7 @@ struct Numeric
     ~Numeric() = default; // std::unique_ptr<Type> does not require management
 
     // rule of 5: define move constructor
-    Numeric (Numeric&& other) : value(std::move(other.value)) 
+    Numeric (Numeric&& other) : value (std::move (other.value)) 
     {
         other.value = nullptr;
     }
@@ -132,7 +132,7 @@ struct Numeric
     // rule of 5: define move assignment operator
     Numeric& operator= (Numeric&& other)
     {
-        value = std::move(other.value);
+        value = std::move (other.value);
         other.value = nullptr;
         return *this;
     }
@@ -144,7 +144,7 @@ struct Numeric
         return *this;
     }
 
-    Numeric (Type t) : value (std::make_unique<Type>(std::move (t))) {}
+    Numeric (Type t) : value (std::make_unique<Type> (std::move (t))) {}
 
     //this is the read-only conversion function
     operator T() const { return *value; } // invoke Temporary<T>s conversion function
@@ -205,7 +205,7 @@ struct Numeric
     template <typename CallableType>
     Numeric& apply (CallableType&& callable)
     {
-        callable(value);
+        callable (value);
         return *this;
     }
 
@@ -219,11 +219,8 @@ struct Numeric
 private:
     std::unique_ptr<Type> value;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Numeric)
 };
-
-template <typename T>
-Numeric(T) -> Numeric<T>;
 
 //void part3()
 //{
