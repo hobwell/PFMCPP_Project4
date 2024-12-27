@@ -3,7 +3,9 @@
 #include <functional>
 #include <cmath>
 #include <memory>
-#include "Temporary.h"
+
+template <typename T>
+struct Temporary;
 
 template <typename T>
 struct Numeric
@@ -16,23 +18,23 @@ struct Numeric
         return *this;
     }
 
-    Numeric (Type t) : value (std::make_unique<Temporary<T>>(std::move (t))) {}
+    Numeric (Type t) : value (std::make_unique<Type>(std::move (t))) {}
 
     operator T() const { return static_cast<T> (*value); }
 
-    Numeric& operator+= (T rhs)
+    Numeric& operator+= (Type rhs)
     {
         *value += rhs;
         return *this;
     }
 
-    Numeric& operator-= (T rhs)
+    Numeric& operator-= (Type rhs)
     {
         *value -= rhs;
         return *this;
     }
 
-    Numeric& operator*= (T rhs)
+    Numeric& operator*= (Type rhs)
     {
         *value *= rhs;
         return *this;
@@ -73,15 +75,15 @@ struct Numeric
         return *this;
     }
 
-    Numeric& pow (T exponent)
+    Numeric& pow (Type exponent)
     {
-       *value = static_cast<T> (std::pow (*value, exponent));
+       *value = std::pow (*value, exponent);
         
         return *this;
     }
 
 private:
-    std::unique_ptr<Temporary<T>> value;
+    std::unique_ptr<Type> value;
 };
 
 // Deduction guide
