@@ -13,13 +13,7 @@ Create a branch named Part9
  2) move these macros after the JUCE_LEAK_DETECTOR macro :
  */
 
-#define JUCE_DECLARE_NON_COPYABLE(className) \
-            className (const className&) = delete;\
-            className& operator= (const className&) = delete;
 
-#define JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(className) \
-            JUCE_DECLARE_NON_COPYABLE(className) \
-            JUCE_LEAK_DETECTOR(className)
 
 /*
  3) add JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary) to the end of the  Temporary<> struct
@@ -75,6 +69,7 @@ Use a service like https://www.diffchecker.com/diff to compare your output.
 #include <iostream>
 #include <cmath>
 #include <functional>
+#include "LeakedObjectDetector.h"
 
 template<typename NumericType>
 struct Temporary
@@ -96,6 +91,8 @@ struct Temporary
 private:
     static int counter;
     NumericType v;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Temporary)
 };
 
 
@@ -114,24 +111,12 @@ struct Numeric
     }
 
     Numeric (Type t) : value (std::make_unique<Type>(std::move (t))) {}
-//that confuses me
-// Type is Numeric<T> how is that cast to T?
-//ahhh - got it, the conversion operator in Temporary is kicking in here //yep. 2 levels of conversion. 
-// this is so hard to think about.  Particularly since I can't debug to see what is going on.  my wrong assumptions are killing me here.
-
-//static cast returns Temporary<T>.  then this function itself returns T(), so the Temprorary::operator Numeric() is invoked to convert that Temporary<T> into a T
-//type is Type = Temporary<T>; 
-
-//Copy this project into cppinsights.io and run it.  You'll see all of the behind-the-scene conversions. 
-
-    // operator T() const { return static_cast<Type>(*value); } //wrong: this casts to Numeric<T>
 
     //this is the read-only conversion function
     operator T() const { return *value; } // invoke Temporary<T>s conversion function
-    // operator T&() { return static_cast<Type>(*value); } //wrong: this casts to Numeric<T> (which doesn't make sense)
+    
     // this is the read-write conversion function
     operator T&() { return *value; } // invoke Temporary<T>s conversion function
-    //error: cannot convert 'const Numeric<double>' to 'float' without a conversion operator
 
 /*
  6) Finally, your conversion function in your templated class is going to be returning this Temporary, 
@@ -234,6 +219,8 @@ struct Numeric
 
 private:
     std::unique_ptr<Type> value;
+
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Numeric)
 };
 
 //void part3()
