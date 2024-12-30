@@ -137,14 +137,7 @@ struct Numeric
         return *this;
     }
 
-    // added to suppress an error when assigning a const T to a Numeric<T>
-    Numeric& operator= (const T& rhs)
-    {
-        *value = rhs;
-        return *this;
-    }
-
-    Numeric (Type t) : value (std::make_unique<Type> (std::move (t))) {}
+    Numeric (T t) : value (std::make_unique<Type> (std::move (t))) {}
 
     //this is the read-only conversion function
     operator T() const { return *value; } // invoke Temporary<T>s conversion function
